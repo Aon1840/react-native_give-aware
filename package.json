@@ -8,11 +8,15 @@
   },
   "dependencies": {
     "expo": "^32.0.0",
+    "firebase": "^6.0.2",
     "native-base": "^2.12.1",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-image-slider-show": "^1.0.3",
     "react-native-navigation": "^2.17.0",
-    "react-navigation": "^3.9.1"
+    "react-navigation": "^3.4.1",
+    "uuid": "^3.2.1",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
