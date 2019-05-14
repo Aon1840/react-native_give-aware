@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { Container, Item, Form, Input, Button, Label, Alert } from "native-base";
 import * as firebase from 'firebase';
-import { firebaseConfig } from '../config';
-// firebase.initializeApp(firebaseConfig);
+
 
 export default class RegisterScreen extends Component {
 
@@ -28,8 +27,11 @@ export default class RegisterScreen extends Component {
             if ( password === rePassword) {
                 console.log("password: ",password)
                 console.log("rePassword: ",rePassword)
+
+                // Create User
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then( (data) => {
+                    this.addUserData(email,password,firstname,lastname);
                     alert("Register Success!");
                     this.props.navigation.navigate("Login")
                     console.log("data: ",data);
@@ -51,6 +53,21 @@ export default class RegisterScreen extends Component {
         } else {
             alert("Please enter the information")
         }
+    }
+
+    addUserData(email, password, firstname, lastname){
+        firebase.database().ref('Users/').push({
+            email,
+            password,
+            firstname,
+            lastname
+        }).then((data)=>{
+            //success callback
+            console.log('data ' , data)
+        }).catch((error)=>{
+            //error callback
+            console.log('error ' , error)
+        })
     }
 
     render() {
