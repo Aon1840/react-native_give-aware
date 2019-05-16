@@ -1,29 +1,57 @@
-import { createStackNavigator, createAppContainer} from 'react-navigation';
+import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import HomeScreen from '../screens/HomeScreen';
+// import HomeScreen2 from '../screens/HomeScreen2';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import ListPostScreen from '../screens/ListPostScreen';
+
+const DrawerNavigator = createDrawerNavigator(
+    {
+        Home: {
+            screen: HomeScreen,
+        },
+        Register: {
+            screen: RegisterScreen,
+        },
+    },
+        {
+            drawerPosition: 'right'
+        }
+    );
 
 const AppNavigator = createStackNavigator(
     {
-       Home: {
-           screen: HomeScreen
-       },
-       Login: {
-           screen: LoginScreen
-       },
-       Register: {
-           screen: RegisterScreen
-       }
+        Hamburger:{
+            screen: DrawerNavigator
+        },
+        Home: {
+            screen: HomeScreen
+        },
+        Login: {
+            screen: LoginScreen
+        },
+        Register: {
+            screen: RegisterScreen
+        },
+        ListPost: {
+            screen: ListPostScreen
+        }
     },
     {
-       initialRouteName: "Login"
+        initialRouteName: "ListPost"
     }
-   ) ;
+);
 
 AppNavigator.navigationOptions = {
     header: null,
+    headerMode: null,
 }
+DrawerNavigator.navigationOptions = {
+    header: null,
+    headerMode: null,
+} 
 
-const AppContainer = createAppContainer(AppNavigator) ;
+// const AppContainer = createAppContainer(DrawerNavigator);
+const AppContainer = createAppContainer(AppNavigator);
 
-export default AppContainer ;
+export default AppContainer;

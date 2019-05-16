@@ -39,10 +39,11 @@ class HomeScreen extends Component {
 
   _onPressBurgerMenu = () => {
     console.log('in _onPressBurgerMenu')
-
-    Alert.alert(
-      'Burger Menu'
-    )
+    // this.props.navigation.openDrawer()
+    // onPress={ this.props.navigation.openDrawer()}
+    // Alert.alert(
+    //   'Burger Menu'
+    // )
   }
 
   _onPressSearch = () => {
@@ -62,7 +63,7 @@ class HomeScreen extends Component {
       this.setState({
         user:user
       })
-      alert(user.email);
+      // alert(user.email);
       console.log("User: ",user);
       console.log("UID User: ",user.uid);
     })
@@ -76,18 +77,22 @@ class HomeScreen extends Component {
     return (
       <View>
         <Header onPressBack = {this._onPressBack}
+                // onPressBurgerMenu = { this.props.navigation.openDrawer()}
                 onPressBurgerMenu = {this._onPressBurgerMenu}
                 onPressSearch = {this._onPressSearch}
         />
 
         <ScrollView>
           <Text> HomeScreen </Text>
-          <Button full rounded style={{ marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
+          <Button full rounded style={{ marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this._logout() }}
               >
-
               <Text>Signup</Text>
           </Button>
+          {/* <Button full rounded style={{ marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
+            onPress={(navigation) => this.props.navigation.openDrawer()}>
+            <Text>Open Drawer</Text>
+          </Button> */}
         </ScrollView>
 
         

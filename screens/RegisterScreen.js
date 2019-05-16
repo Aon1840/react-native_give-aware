@@ -7,7 +7,7 @@ import * as firebase from 'firebase';
 export default class RegisterScreen extends Component {
 
     static navigationOptions = {
-        header: null
+        // header: null
     }
 
     constructor(props) {

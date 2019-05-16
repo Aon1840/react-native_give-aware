@@ -48,6 +48,7 @@ class AppHeader extends Component {
                                  >               
                 <Image  style = {styles.menuIcon}
                         source = {require("../images/menu-button.png")}
+                        onPress = {()=> this.props.navigation.openDrawer()}
                 />
               </TouchableOpacity>
             </Right>
