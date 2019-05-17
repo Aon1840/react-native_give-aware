@@ -4,6 +4,7 @@ import { Container, Header, Content, Item, Form, Text, Button, Input, Left, Labe
 import { Constants, ImagePicker, Permissions } from 'expo';
 import uuid from 'uuid';
 import * as firebase from 'firebase';
+import { ScrollView } from 'react-native-gesture-handler';
 
 class CreatePostScreen extends Component {
     constructor(props) {
@@ -58,6 +59,7 @@ class CreatePostScreen extends Component {
     render() {
         let { name, area, province, description, price, imageUrl } = this.state;
         return (
+            <ScrollView>
             <Container style={styles.container}>
                 <Form>
                     <Label style={{ marginTop: `5%`, alignSelf: 'center' }}>สร้างโพสต์ขายของ</Label>
@@ -104,7 +106,7 @@ class CreatePostScreen extends Component {
                             onChangeText={price => this.setState({ price })}
                         />
                     </Item>
-                    <Image source={{ uri: this.state.imageUrl }} style={{alignSelf: 'center', justifyContent: "center", marginTop: `50%`}} />
+                    <Image source={{ uri: this.state.imageUrl }} style={{alignSelf: 'center', justifyContent: "center", height: 250, width: 250}} />
 
                     <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }}
                         onPress={() => this.pickImage()}
@@ -114,12 +116,13 @@ class CreatePostScreen extends Component {
 
 
                     <Button full rounded style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }}
-                        onPress={() => this.createPost(name, area, province, description, price, imageUrl)}
+                        onPress={() => {this.createPost(name, area, province, description, price, imageUrl), this.props.navigation.navigate('ListPost')}}
                     >    
                         <Text>สร้างโพสต์</Text>
                     </Button>
                 </Form>
             </Container>
+            </ScrollView>
         );
     }
 }

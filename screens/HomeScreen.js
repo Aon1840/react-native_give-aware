@@ -61,44 +61,68 @@ class HomeScreen extends Component {
   _getUser = () => {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({
-        user:user
+        user: user
       })
       // alert(user.email);
-      console.log("User: ",user);
-      console.log("UID User: ",user.uid);
+      console.log("User: ", user);
+      console.log("UID User: ", user.uid);
     })
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this._getUser();
   }
 
   render() {
     return (
-      <View>
-        <Header onPressBack = {this._onPressBack}
-                // onPressBurgerMenu = { this.props.navigation.openDrawer()}
-                onPressBurgerMenu = {this._onPressBurgerMenu}
-                onPressSearch = {this._onPressSearch}
+      <View style={{flex: 1}}>
+        <Header onPressBack={this._onPressBack}
+          // onPressBurgerMenu = { this.props.navigation.openDrawer()}
+          onPressBurgerMenu={this._onPressBurgerMenu}
+          onPressSearch={this._onPressSearch}
         />
 
-        <ScrollView>
+        <ScrollView style={{flex: 1}}>
           <Text> HomeScreen </Text>
           <Button full rounded style={{ marginLeft: `5%`, marginRight: `5%` }}
-              onPress={() => { this._logout() }}
-              >
-              <Text>Signup</Text>
+            onPress={() => { this._logout() }}
+          >
+            <Text>Signup</Text>
           </Button>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')} style={styles.fab}>
+            <Text style={styles.fabIcon}>+</Text>
+          </TouchableOpacity>
           {/* <Button full rounded style={{ marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
             onPress={(navigation) => this.props.navigation.openDrawer()}>
             <Text>Open Drawer</Text>
           </Button> */}
         </ScrollView>
 
-        
+
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  fab: {
+    position: 'absolute',
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 20,
+    bottom: `-1150%`,
+    backgroundColor: '#03A9F4',
+    borderRadius: 30,
+    elevation: 8
+  },
+  fabIcon: {
+    marginTop: -8,
+    marginLeft: 2,
+    fontSize: 40,
+    color: 'white'
+  }
+})
 
 export default HomeScreen;
