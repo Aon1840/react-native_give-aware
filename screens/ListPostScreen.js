@@ -68,10 +68,29 @@ class ListPostScreen extends Component {
         })
     }
 
+    viewDetail = (name, area, province, description, price, imageUrl) => {
+        this.props.navigation.navigate('PostDetail', 
+            {
+                name: name,
+                area: area,
+                province: province,
+                description: description,
+                price: price,
+                imageUrl: imageUrl
+            });
+    }
+
     extractKey = ({ imageUrl }) => imageUrl
 
     renderItem = ({ item }) => {
         return (
+            <TouchableHighlight onPress={()=> this.viewDetail(
+                item.name,
+                item.area,
+                item.province,
+                item.descption,
+                item.price,
+                item.imageUrl)} item={item}>
             <Card>
                 <CardItem>
                     <Left>
@@ -106,6 +125,7 @@ class ListPostScreen extends Component {
                     </Left>
                 </CardItem>
             </Card>
+            </TouchableHighlight>
         )
     }
 

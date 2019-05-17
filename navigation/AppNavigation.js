@@ -4,6 +4,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ListPostScreen from '../screens/ListPostScreen';
+import PostDetailScreen from '../screens/PostDetailScreen';
 import CreatePostScreen from '../screens/CreatPostScreen';
 
 const DrawerNavigator = createDrawerNavigator(
@@ -39,10 +40,13 @@ const AppNavigator = createStackNavigator(
         },
         CreatePost: {
             screen: CreatePostScreen
-        }
+        },
+        PostDetail: {
+            screen: PostDetailScreen
+        },
     },
     {
-        initialRouteName: "Login"
+        initialRouteName: "ListPost"
     }
 );
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import { View, Text, Image, Animated, Platform, TouchableOpacity, StyleSheet } from 'react-native';
-import { Alert, StyleSheet, Text, View, ScrollView, Animated, Platform, TouchableOpacity, RefreshControl, Image } from 'react-native';
+import { Alert, StyleSheet, Text, View, ScrollView, Animated, Platform, TouchableOpacity, RefreshControl, Image, FlatList } from 'react-native';
 import { Button } from "native-base";
 
 
@@ -27,6 +27,17 @@ class HomeScreen extends Component {
         Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT : 0,
       ),
       // refreshing: false,
+      data: [
+        { name: 'John', age: 18 },
+        { name: 'Lilli', age: 23 },
+        { name: 'Lavera', age: 46 },
+        { name: 'Paul', age: 32 },
+        { name: 'Jene', age: 14 },
+        { name: 'Felipe', age: 42 },
+        { name: 'Shawn', age: 26 },
+        { name: 'Carey', age: 24 },
+        { name: 'Mark', age: 33 }
+      ]
     };
   }
 
@@ -75,36 +86,125 @@ class HomeScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.container}>
         <Header onPressBack={this._onPressBack}
           // onPressBurgerMenu = { this.props.navigation.openDrawer()}
           onPressBurgerMenu={this._onPressBurgerMenu}
           onPressSearch={this._onPressSearch}
         />
 
-        <ScrollView style={{flex: 1}}>
-          <Text> HomeScreen </Text>
+        {/* <FlatList
+          data={this.state.data}
+          renderItem={({ item }) => <View style={styles.list}>
+            <Text>Name : {item.name}</Text>
+            <Text>Age : {item.age}</Text>
+          </View>}
+        /> */}
+        <ScrollView>
+        <View>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
+          <Text>Hello</Text>
           <Button full rounded style={{ marginLeft: `5%`, marginRight: `5%` }}
-            onPress={() => { this._logout() }}
-          >
-            <Text>Signup</Text>
-          </Button>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')} style={styles.fab}>
-            <Text style={styles.fabIcon}>+</Text>
-          </TouchableOpacity>
-          {/* <Button full rounded style={{ marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
-            onPress={(navigation) => this.props.navigation.openDrawer()}>
-            <Text>Open Drawer</Text>
-          </Button> */}
+          onPress={() => { this._logout() }}
+        >
+          <Text>Signup</Text>
+        </Button>
+        </View>
         </ScrollView>
-
-
-      </View>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')} style={styles.fab}>
+          <Text style={styles.fabIcon}>+</Text>
+        </TouchableOpacity>
+      </View >
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  list: {
+    // margin: 5,
+    // backgroundColor: 'white',
+    // height: `100%`,
+    // justifyContent: 'space-around',
+    // paddingLeft: 10,
+    // elevation: 1
+  },
+  list: {
+    margin: 5,
+    backgroundColor: 'white',
+    height:80,
+    justifyContent: 'space-around',
+    paddingLeft: 10,
+    elevation: 1
+  },
   fab: {
     position: 'absolute',
     width: 56,
@@ -112,14 +212,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     right: 20,
-    bottom: `-1150%`,
+    bottom: 20,
     backgroundColor: '#03A9F4',
     borderRadius: 30,
     elevation: 8
   },
   fabIcon: {
-    marginTop: -8,
-    marginLeft: 2,
     fontSize: 40,
     color: 'white'
   }

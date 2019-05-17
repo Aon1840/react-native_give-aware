@@ -35,6 +35,7 @@ class CreatePostScreen extends Component {
                 imageUrl,
             }).then((data) => {
                 console.log("------ Create Post Success: ",data);
+                this.props.navigation.navigate('ListPost')
             }).catch((error) => {
                 alert("error: ",error.message);
             });
@@ -116,7 +117,7 @@ class CreatePostScreen extends Component {
 
 
                     <Button full rounded style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }}
-                        onPress={() => {this.createPost(name, area, province, description, price, imageUrl), this.props.navigation.navigate('ListPost')}}
+                        onPress={() => {this.createPost(name, area, province, description, price, imageUrl)}}
                     >    
                         <Text>สร้างโพสต์</Text>
                     </Button>
