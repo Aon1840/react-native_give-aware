@@ -21,6 +21,7 @@ export default class RegisterScreen extends Component {
         };
     }
 
+    
     signUp = (email, password, rePassword, firstname, lastname) => {
 
         if (email && password && firstname && lastname && rePassword != null) {
@@ -56,7 +57,8 @@ export default class RegisterScreen extends Component {
     }
 
     addUserData(email, password, firstname, lastname){
-        firebase.database().ref('Users/').push({
+        const uid = firebase.auth().currentUser.uid
+        firebase.database().ref('Users/'+ uid).set({
             email,
             password,
             firstname,
