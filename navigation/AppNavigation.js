@@ -42,7 +42,7 @@ const AppNavigator = createStackNavigator(
         }
     },
     {
-        initialRouteName: "CreatePost"
+        initialRouteName: "ListPost"
     }
 );
 
