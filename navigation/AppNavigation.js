@@ -7,6 +7,7 @@ import ListPostScreen from '../screens/ListPostScreen';
 import PostDetailScreen from '../screens/PostDetailScreen';
 import CreatePostScreen from '../screens/CreatPostScreen';
 import MyPostScreen from '../screens/MyPostScreen';
+import MyPostScreen2NoUse from '../screens/MyPostScreen2';
 
 const DrawerNavigator = createDrawerNavigator(
     {
@@ -47,10 +48,13 @@ const AppNavigator = createStackNavigator(
         },
         MyPost: {
             screen: MyPostScreen
+        },
+        test: {
+            screen: MyPostScreen2NoUse
         }
     },
     {
-        initialRouteName: "Login"
+        initialRouteName: "MyPost"
     }
 );
 

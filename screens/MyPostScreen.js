@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Image, FlatList, TouchableHighlight, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Image, FlatList, TouchableHighlight, TouchableOpacity, View, StyleSheet, Alert } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import YellowButton from '../components/YellowButton';
 import * as firebase from 'firebase';
 import { SwipeListView } from 'react-native-swipe-list-view';
+
 
 
 class MyPostScreen extends Component {
@@ -22,9 +23,9 @@ class MyPostScreen extends Component {
     }
 
     loadMyPost(taskRef) {
-        const uid = firebase.auth().currentUser.uid
-        console.log("UID: ",uid)
-        taskRef.orderByChild('uid').equalTo(uid).on("value", snapshot => {
+        // const uid = firebase.auth().currentUser.uid
+        // console.log("UID: ",uid)
+        taskRef.orderByChild('uid').equalTo("9umDcfx7O2ZsRlg47xdpfn9EJUE3").on("value", snapshot => {
             var posts = [];
             snapshot.forEach(child => {
                 posts.push({
@@ -56,7 +57,55 @@ class MyPostScreen extends Component {
             });
     }
 
+    checkForDelete = (key) => {
+        console.log("key is from checkForDelete: ",key)
+        Alert.alert(
+            'คุณมั่นใจนะว่าจะลบ?',
+            'ถ้าลบมันจะโพสต์ของคุณจะหายไปจริงๆนะ',
+            [
+              {text: 'ลบ', onPress: () => this.deletePost(key) },
+              {
+                text: 'ยกเลิก',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+            ],
+            {cancelable: false},
+          );
+    }
+
+    deletePost = (key) => {
+        console.log("key is from deletePost: ",key)
+        firebase.database().ref('posts/'+key).remove()
+            .then( (data) => {
+                console.log("data from delete: ",data);
+                alert("")
+            }).catch( (error) => {
+
+            })
+    }
+
     extractKey = ({ name }) => name
+
+    renderHiddenItem = ({ item }) => {
+        console.log("UID -----: ",item)
+        return (
+            <View style={styles.rowBack}
+                onPress={ ()=> alert("hello")}>
+                <TouchableOpacity
+                    // onPress={() => this.deletePost(item.key)}
+                    onPress={() => this.checkForDelete(item.key)}
+                    style={styles.swipeRightRight}>
+                    <Text style={styles.backTextWhite}>Delete</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => alert("edit")}
+                    style={styles.swipeRightLeft}>
+                    <Text style={styles.backTextWhite}>Edit</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
 
     renderItem = ({ item }) => {
         return (
@@ -67,11 +116,11 @@ class MyPostScreen extends Component {
                 item.descption,
                 item.price,
                 item.imageUrl)} item={item}>
-                <Card 
-                style={{ height: 150 }}>
+                <Card
+                    style={{ height: 150 }}>
                     <CardItem >
                         <Left>
-                            <Image style={{ width: `40%`, height: 150 }} source={{ uri: item.imageUrl }}  />
+                            <Image style={{ width: `40%`, height: 150 }} source={{ uri: item.imageUrl }} />
                             <Body style={{ width: `50%` }}>
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
@@ -102,7 +151,7 @@ class MyPostScreen extends Component {
                         </Left>
                     </CardItem>
                 </Card>
-             </View>
+            </View>
         )
     }
 
@@ -114,21 +163,8 @@ class MyPostScreen extends Component {
                         useFlatList
                         data={this.state.data}
                         renderItem={this.renderItem}
-                        renderHiddenItem={(data) => (
-                            <View style={styles.rowBack}>
-                                <TouchableOpacity
-                                    style={styles.swipeRight}>
-                                    <Text style={styles.backTextWhite}>Delete</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={ () => alert("edit") }
-                                    style={styles.swipeLeft}>
-                                    <Text style={styles.backTextWhite}>Edit</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                        leftOpenValue={75}
-                        rightOpenValue={-75}
+                        renderHiddenItem={this.renderHiddenItem}
+                        rightOpenValue={-150}
                     />
                 </Content>
             </Container>
@@ -137,7 +173,7 @@ class MyPostScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    swipeRight: {
+    swipeRightRight: {
         color: 'white',
         alignItems: 'center',
         bottom: 0,
@@ -151,7 +187,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         right: 0,
     },
-    swipeLeft: {
+    swipeRightLeft: {
         color: 'white',
         alignItems: 'center',
         bottom: 0,
@@ -159,12 +195,15 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         marginTop: 8,
-        marginLeft: 5,
+        marginRight: 5,
         height: 150,
         width: 75,
         backgroundColor: 'blue',
-        left: 0,
-    }
+        right: 75,
+    },
+    backTextWhite: {
+        color: '#FFF',
+    },
 });
 
 export default MyPostScreen;

@@ -173,10 +173,15 @@ class HomeScreen extends Component {
 
             <Button full rounded style={{ marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this._logout() }}>
-              <Text>Signup</Text>
+              <Text>Logout</Text>
             </Button>
 
-            <Button full rounded style={{ marginLeft: `5%`, marginRight: `5%` }}
+            <Button full rounded style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
+              onPress={() => { this.props.navigation.navigate('ListPost') }}>
+              <Text>See all Post</Text>
+            </Button>
+
+            <Button full rounded style={{ marginTop: `5%`, marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('MyPost') }}
             >
               <Text>My Post</Text>
