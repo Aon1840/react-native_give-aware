@@ -5,51 +5,26 @@ import YellowButton from '../components/YellowButton';
 import * as firebase from 'firebase';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-// const HEADER_MAX_HEIGHT = 300;
-// const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 60 : 73;
-// const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-class ListPostScreen extends Component {
+class MyPostScreen extends Component {
     constructor(props) {
         super(props);
 
         this.taskRef = firebase.database().ref("/posts");
         const data = [];
         this.state = {
-            data: data,
-            // data: [
-            //     {
-            //         name: 'หมวกกันน็อค',
-            //         desription: 'บลาบลาบลา',
-            //         area: 'บางประกอก',
-            //         province: 'กรุงเทพ',
-            //         data: '24/02/2019',
-            //         owner: 'สมศรี อำอนาย',
-            //         imageUrl: 'https://firebasestorage.googleapis.com/v0/b/projecthybird.appspot.com/o/166086bd-7d2e-49f7-abac-f256399a979f?alt=media&token=a6d36200-aead-4059-ba98-23eb04c81f4b'
-            //     },
-            //     {
-            //         name: 'หมวกกันน็อค',
-            //         desription: 'บลาบลาบลา',
-            //         area: 'บางประกอก',
-            //         province: 'กรุงเทพ',
-            //         data: '24/02/2019',
-            //         owner: 'สมศรี อำอนาย',
-            //         imageUrl: 'https://firebasestorage.googleapis.com/v0/b/projecthybird.appspot.com/o/eec226dc-a217-4c55-ad42-806f8b30d5e6?alt=media&token=bf97a41a-fd62-46c1-a8dc-34c330d5ef7e'
-            //     }
-            // ]
+            data: data
         };
     }
 
-    //   static navigationOptions = {
-    //     header: null
-    //   }
-
     componentDidMount() {
-        this.listtenForNewPost(this.taskRef);
+        this.loadMyPost(this.taskRef);
     }
 
-    listtenForNewPost(taskRef) {
-        taskRef.on("value", snapshot => {
+    loadMyPost(taskRef) {
+        const uid = firebase.auth().currentUser.uid
+        console.log("UID: ",uid)
+        taskRef.orderByChild('uid').equalTo(uid).on("value", snapshot => {
             var posts = [];
             snapshot.forEach(child => {
                 posts.push({
@@ -85,17 +60,18 @@ class ListPostScreen extends Component {
 
     renderItem = ({ item }) => {
         return (
-            <TouchableOpacity onPress={() => this.viewDetail(
+            <View onPress={() => this.viewDetail(
                 item.name,
                 item.area,
                 item.province,
                 item.descption,
                 item.price,
                 item.imageUrl)} item={item}>
-                <Card style={{ height: 150 }}>
-                    <CardItem>
+                <Card 
+                style={{ height: 150 }}>
+                    <CardItem >
                         <Left>
-                            <Image style={{ width: `40%`, height: 150 }} source={{ uri: item.imageUrl }} />
+                            <Image style={{ width: `40%`, height: 150 }} source={{ uri: item.imageUrl }}  />
                             <Body style={{ width: `50%` }}>
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
@@ -120,27 +96,21 @@ class ListPostScreen extends Component {
                                         justifyContent: 'center',
                                     }}>
                                         ซื้อสินค้า
-                                </Text>
+                            </Text>
                                 </TouchableHighlight>
                             </Body>
                         </Left>
                     </CardItem>
                 </Card>
-            </TouchableOpacity>
+             </View>
         )
     }
 
     render() {
         return (
             <Container>
-                {/* <Header /> */}
                 <Content>
-                    <FlatList
-                        data={this.state.data}
-                        renderItem={this.renderItem}
-                        keyExtractor={this.extractKey}
-                    />
-                    {/* <SwipeListView
+                    <SwipeListView
                         useFlatList
                         data={this.state.data}
                         renderItem={this.renderItem}
@@ -159,7 +129,7 @@ class ListPostScreen extends Component {
                         )}
                         leftOpenValue={75}
                         rightOpenValue={-75}
-                    /> */}
+                    />
                 </Content>
             </Container>
         );
@@ -197,4 +167,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ListPostScreen;
+export default MyPostScreen;
