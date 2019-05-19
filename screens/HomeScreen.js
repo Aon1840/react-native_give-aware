@@ -65,23 +65,35 @@ class HomeScreen extends Component {
     )
   }
 
-  _logout = () => {
-    this.props.navigation.replace('Login');
+  _logout = async () => {
+    await this.props.navigation.replace('Login');
+    await firebase.auth().signOut().then(function() {
+      console.log('Signed Out');
+    }, function(error) {
+      console.error('Sign Out Error', error);
+    });
   }
 
-  _getUser = () => {
-    firebase.auth().onAuthStateChanged(user => {
-      this.setState({
-        user: user
-      })
-      // alert(user.email);
-      console.log("User: ", user);
-      console.log("UID User: ", user.uid);
-    })
-  }
+  // _getUser = () => {
+  //   firebase.auth().onAuthStateChanged(user => {
+  //     this.setState({
+  //       user: user
+  //     })
+  //     // alert(user.email);
+  //     console.log("User: ", user);
+  //     console.log("UID User: ", user.uid);
+  //   })
+  // }
 
   componentDidMount() {
-    this._getUser();
+    // this._getUser();
+
+    // firebase.auth().onAuthStateChanged(user => {
+      // alert(user.uid);
+      // console.log("state change: ",user.uid)
+    // })
+    // const uid = firebase.auth().currentUser.uid
+    // console.log("UID from current user: ",uid)
   }
 
   render() {

@@ -54,7 +54,7 @@ const AppNavigator = createStackNavigator(
         }
     },
     {
-        initialRouteName: "MyPost"
+        initialRouteName: "Login"
     }
 );
 

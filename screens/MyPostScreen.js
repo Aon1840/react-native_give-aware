@@ -23,9 +23,9 @@ class MyPostScreen extends Component {
     }
 
     loadMyPost(taskRef) {
-        // const uid = firebase.auth().currentUser.uid
-        // console.log("UID: ",uid)
-        taskRef.orderByChild('uid').equalTo("9umDcfx7O2ZsRlg47xdpfn9EJUE3").on("value", snapshot => {
+        const uid = firebase.auth().currentUser.uid
+        console.log("UID: ",uid)
+        taskRef.orderByChild('uid').equalTo(uid).on("value", snapshot => {
             var posts = [];
             snapshot.forEach(child => {
                 posts.push({
@@ -79,9 +79,9 @@ class MyPostScreen extends Component {
         firebase.database().ref('posts/'+key).remove()
             .then( (data) => {
                 console.log("data from delete: ",data);
-                alert("")
+                alert("Delete Success!")
             }).catch( (error) => {
-
+                alert(error.message)
             })
     }
 
