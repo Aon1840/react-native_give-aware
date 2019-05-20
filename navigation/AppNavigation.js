@@ -8,9 +8,14 @@ import PostDetailScreen from '../screens/PostDetailScreen';
 import CreatePostScreen from '../screens/CreatPostScreen';
 import MyPostScreen from '../screens/MyPostScreen';
 import MyPostScreen2NoUse from '../screens/MyPostScreen2';
+import MyNavigator from '../navigation/MyNavigator';
+
 
 const DrawerNavigator = createDrawerNavigator(
     {
+        stack: {
+            screen: MyNavigator
+        },
         Home: {
             screen: HomeScreen,
         },
@@ -23,51 +28,51 @@ const DrawerNavigator = createDrawerNavigator(
         }
     );
 
-const AppNavigator = createStackNavigator(
-    {
-        Hamburger:{
-            screen: DrawerNavigator
-        },
-        Home: {
-            screen: HomeScreen
-        },
-        Login: {
-            screen: LoginScreen
-        },
-        Register: {
-            screen: RegisterScreen
-        },
-        ListPost: {
-            screen: ListPostScreen
-        },
-        CreatePost: {
-            screen: CreatePostScreen
-        },
-        PostDetail: {
-            screen: PostDetailScreen
-        },
-        MyPost: {
-            screen: MyPostScreen
-        },
-        test: {
-            screen: MyPostScreen2NoUse
-        }
-    },
-    {
-        initialRouteName: "Login"
-    }
-);
+// const AppNavigator = createStackNavigator(
+//     {
+//         Hamburger:{
+//             screen: DrawerNavigator
+//         },
+//         Home: {
+//             screen: HomeScreen
+//         },
+//         Login: {
+//             screen: LoginScreen
+//         },
+//         Register: {
+//             screen: RegisterScreen
+//         },
+//         ListPost: {
+//             screen: ListPostScreen
+//         },
+//         CreatePost: {
+//             screen: CreatePostScreen
+//         },
+//         PostDetail: {
+//             screen: PostDetailScreen
+//         },
+//         MyPost: {
+//             screen: MyPostScreen
+//         },
+//         test: {
+//             screen: MyPostScreen2NoUse
+//         }
+//     },
+//     {
+//         initialRouteName: "Login"
+//     }
+// );
 
-AppNavigator.navigationOptions = {
-    header: null,
-    headerMode: null,
-}
+// AppNavigator.navigationOptions = {
+//     header: null,
+//     headerMode: null,
+// }
 DrawerNavigator.navigationOptions = {
     header: null,
     headerMode: null,
 } 
 
-// const AppContainer = createAppContainer(DrawerNavigator);
-const AppContainer = createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(DrawerNavigator);
+// const AppContainer = createAppContainer(AppNavigator);
 
 export default AppContainer;

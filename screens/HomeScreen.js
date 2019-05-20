@@ -50,7 +50,7 @@ class HomeScreen extends Component {
 
   _onPressBurgerMenu = () => {
     console.log('in _onPressBurgerMenu')
-    // this.props.navigation.openDrawer()
+    this.props.navigation.openDrawer()
     // onPress={ this.props.navigation.openDrawer()}
     // Alert.alert(
     //   'Burger Menu'
@@ -96,6 +96,18 @@ class HomeScreen extends Component {
     // console.log("UID from current user: ",uid)
   }
 
+  createPost(){
+    this.props.navigation.navigate('CreatePost',
+            {
+                name: "",
+                area: "",
+                province: "",
+                description: "",
+                price: "",
+                imageUrl: ""
+            });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -117,71 +129,7 @@ class HomeScreen extends Component {
             <Text>Hello</Text>
             <Text>Hello</Text>
             <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
+            
 
             <Button full rounded style={{ marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this._logout() }}>
@@ -201,7 +149,7 @@ class HomeScreen extends Component {
 
           </View>
         </ScrollView>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')} style={styles.fab}>
+        <TouchableOpacity onPress={() => this.createPost()} style={styles.fab}>
           <Text style={styles.fabIcon}>+</Text>
         </TouchableOpacity>
       </View >

@@ -16,12 +16,28 @@ class CreatePostScreen extends Component {
             description: "",
             price: "",
             imageUrl: "",
+            key: "",
         };
     }
 
     async componentDidMount() {
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
         await Permissions.askAsync(Permissions.CAMERA);
+
+
+    }
+
+    componentWillMount() {
+        if (this.props.navigation.state.params.view !== null) {
+            this.setState({
+                name: this.props.navigation.state.params.name,
+                area: this.props.navigation.state.params.area,
+                province: this.props.navigation.state.params.province,
+                description: this.props.navigation.state.params.description,
+                price: this.props.navigation.state.params.price,
+                imageUrl: this.props.navigation.state.params.imageUrl
+            })
+        }
     }
 
     createPost = (name, area, province, description, price, imageUrl) => {
@@ -34,11 +50,49 @@ class CreatePostScreen extends Component {
                 price,
                 imageUrl,
             }).then((data) => {
-                console.log("------ Create Post Success: ",data);
+                console.log("------ Create Post Success: ", data);
                 this.props.navigation.navigate('ListPost')
             }).catch((error) => {
-                alert("error: ",error.message);
+                alert("error: ", error.message);
             });
+        } else {
+            alert("Please enter detail");
+        }
+    }
+
+    updatePost = (name, area, province, description, price, imageUrl) => {
+        if (name && area && province && description && price && imageUrl != null) {
+            // console.log("imageUrl -----: ",imageUrl);
+            firebase.database().ref("/posts").orderByChild('imageUrl').equalTo(imageUrl).on("value", snapshot => {
+                let post = [];
+                snapshot.forEach(child => {
+                    post.push({
+                        key: child.key,
+                        name: child.val().name,
+                        area: child.val().area,
+                        province: child.val().province,
+                        description: child.val().description,
+                        price: child.val().price,
+                        imageUrl: child.val().imageUrl
+                    });
+                })
+                console.log("post: ",post[0].key)
+                // console.log("post: ",post[1].key)
+                // this.setState({ key:post[0].key })
+                // console.log("key-----: ",this.state.key)
+
+                firebase.database().ref("/posts/"+post[0].key).update({
+                    name,
+                    area,
+                    province,
+                    description,
+                    price,
+                    imageUrl,
+                });
+                post = []
+                this.props.navigation.replace('MyPost')
+            })
+
         } else {
             alert("Please enter detail");
         }
@@ -46,84 +100,100 @@ class CreatePostScreen extends Component {
 
     pickImage = async () => {
         let pickerResult = await ImagePicker.launchImageLibraryAsync({
-            // allowsEditing: true,
-            // aspect: [4, 3],
+            allowsEditing: true,
+            aspect: [4, 3],
         });
-        // this._handleImagePicked(pickerResult);
         uploadUrl = await uploadImageAsync(pickerResult.uri);
         alert(uploadUrl);
         this.setState({ imageUrl: uploadUrl })
     };
 
-    
+
 
     render() {
         let { name, area, province, description, price, imageUrl } = this.state;
         return (
-            <ScrollView>
+
             <Container style={styles.container}>
-                <Form>
-                    <Label style={{ marginTop: `5%`, alignSelf: 'center' }}>สร้างโพสต์ขายของ</Label>
-                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                        <Label>หัวข้อโพสต์</Label>
-                        <Input
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            onChangeText={name => this.setState({ name })} />
-                    </Item>
+                <ScrollView>
+                    <Form>
+                        <Label style={{ marginTop: `5%`, alignSelf: 'center' }}>สร้างโพสต์ขายของ</Label>
+                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                            <Label>หัวข้อโพสต์</Label>
+                            <Input
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                value={this.state.name}
+                                onChangeText={name => this.setState({ name })} />
+                        </Item>
 
-                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                        <Label>บริเวณ</Label>
-                        <Input
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            onChangeText={area => this.setState({ area })} />
-                    </Item>
+                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                            <Label>บริเวณ</Label>
+                            <Input
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                value={this.state.area}
+                                onChangeText={area => this.setState({ area })} />
+                        </Item>
 
-                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                        <Label>จังหวัด</Label>
-                        <Input
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            onChangeText={province => this.setState({ province })} />
-                    </Item>
+                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                            <Label>จังหวัด</Label>
+                            <Input
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                value={this.state.province}
+                                onChangeText={province => this.setState({ province })} />
+                        </Item>
 
-                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                        <Label>รายละเอียด</Label>
-                        <Input
-                            secureTextEntry={true}
-                            autoCapitalize="none"
-                            autoCorrect={true}
-                            onChangeText={description => this.setState({ description })}
-                        />
-                    </Item>
+                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                            <Label>รายละเอียด</Label>
+                            <Input
+                                secureTextEntry={true}
+                                autoCapitalize="none"
+                                autoCorrect={true}
+                                value={this.state.description}
+                                onChangeText={description => this.setState({ description })}
+                            />
+                        </Item>
 
-                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                        <Label>ราคา</Label>
-                        <Input
-                            secureTextEntry={true}
-                            autoCapitalize="none"
-                            autoCorrect={true}
-                            onChangeText={price => this.setState({ price })}
-                        />
-                    </Item>
-                    <Image source={{ uri: this.state.imageUrl }} style={{alignSelf: 'center', justifyContent: "center", height: 250, width: 250}} />
-
-                    <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }}
-                        onPress={() => this.pickImage()}
-                    >
-                        <Text>อัพโหลดรูปภาพ</Text>
-                    </Button>
+                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                            <Label>ราคา</Label>
+                            <Input
+                                secureTextEntry={true}
+                                autoCapitalize="none"
+                                autoCorrect={true}
+                                value={this.state.price}
+                                onChangeText={price => this.setState({ price })}
+                            />
+                        </Item>
 
 
-                    <Button full rounded style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }}
-                        onPress={() => {this.createPost(name, area, province, description, price, imageUrl)}}
-                    >    
-                        <Text>สร้างโพสต์</Text>
-                    </Button>
-                </Form>
+                        {this.state.imageUrl ?
+                            <View>
+                                <Image source={{ uri: this.state.imageUrl }} style={{ alignSelf: 'center', justifyContent: "center", marginTop: 30, height: 250, width: 250 }} />
+                                <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }} onPress={() => this.pickImage()}>
+                                    <Text>อัพโหลดรูปภาพ</Text>
+                                </Button>
+                                <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.updatePost(name, area, province, description, price, imageUrl) }}>
+                                    <Text>บันทึกการเปลี่ยนแปลง</Text>
+                                </Button>
+                            </View>
+                            :
+                            <View>
+                                <Image source={require("../images/chooseImage.png")} style={{ alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                                <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }} onPress={() => this.pickImage()}>
+                                    <Text>อัพโหลดรูปภาพ</Text>
+                                </Button>
+                                <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.createPost(name, area, province, description, price, imageUrl) }}>
+                                    <Text>สร้างโพสต์</Text>
+                                </Button>
+                            </View>
+
+                        }
+                    </Form>
+                </ScrollView>
             </Container>
-            </ScrollView>
+
         );
     }
 }
@@ -138,28 +208,28 @@ async function uploadImageAsync(uri) {
     // Why are we using XMLHttpRequest? See:
     // https://github.com/expo/expo/issues/2402#issuecomment-443726662
     const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function(e) {
-        console.log(e);
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
-      xhr.send(null);
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uri, true);
+        xhr.send(null);
     });
-  
+
     const ref = firebase
-      .storage()
-      .ref()
-      .child(uuid.v4());
+        .storage()
+        .ref()
+        .child(uuid.v4());
     const snapshot = await ref.put(blob);
-  
+
     // We're done with the blob, close and release it
     blob.close();
-  
+
     return await snapshot.ref.getDownloadURL();
 }
 

@@ -23,9 +23,9 @@ class MyPostScreen extends Component {
     }
 
     loadMyPost(taskRef) {
-        const uid = firebase.auth().currentUser.uid
-        console.log("UID: ",uid)
-        taskRef.orderByChild('uid').equalTo(uid).on("value", snapshot => {
+        // const uid = firebase.auth().currentUser.uid
+        // console.log("UID: ",uid)
+        taskRef.orderByChild('uid').equalTo("9umDcfx7O2ZsRlg47xdpfn9EJUE3").on("value", snapshot => {
             var posts = [];
             snapshot.forEach(child => {
                 posts.push({
@@ -33,7 +33,7 @@ class MyPostScreen extends Component {
                     name: child.val().name,
                     area: child.val().area,
                     province: child.val().province,
-                    descption: child.val().descption,
+                    description: child.val().description,
                     price: child.val().price,
                     imageUrl: child.val().imageUrl
                 });
@@ -46,7 +46,7 @@ class MyPostScreen extends Component {
     }
 
     viewDetail = (name, area, province, description, price, imageUrl) => {
-        this.props.navigation.navigate('PostDetail',
+        this.props.navigation.navigate('CreatePost',
             {
                 name: name,
                 area: area,
@@ -88,7 +88,7 @@ class MyPostScreen extends Component {
     extractKey = ({ name }) => name
 
     renderHiddenItem = ({ item }) => {
-        console.log("UID -----: ",item)
+        // console.log("UID -----: ",item)
         return (
             <View style={styles.rowBack}
                 onPress={ ()=> alert("hello")}>
@@ -109,11 +109,11 @@ class MyPostScreen extends Component {
 
     renderItem = ({ item }) => {
         return (
-            <View onPress={() => this.viewDetail(
+            <TouchableHighlight onPress={() => this.viewDetail(
                 item.name,
                 item.area,
                 item.province,
-                item.descption,
+                item.description,
                 item.price,
                 item.imageUrl)} item={item}>
                 <Card
@@ -151,7 +151,7 @@ class MyPostScreen extends Component {
                         </Left>
                     </CardItem>
                 </Card>
-            </View>
+            </TouchableHighlight>
         )
     }
 

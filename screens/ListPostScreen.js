@@ -57,7 +57,7 @@ class ListPostScreen extends Component {
                     name: child.val().name,
                     area: child.val().area,
                     province: child.val().province,
-                    descption: child.val().descption,
+                    description: child.val().description,
                     price: child.val().price,
                     imageUrl: child.val().imageUrl
                 });
@@ -89,7 +89,7 @@ class ListPostScreen extends Component {
                 item.name,
                 item.area,
                 item.province,
-                item.descption,
+                item.description,
                 item.price,
                 item.imageUrl)} item={item}>
                 <Card style={{ height: 150 }}>
