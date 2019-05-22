@@ -28,15 +28,6 @@ class HomeScreen extends Component {
       ),
       // refreshing: false,
       data: [
-        { name: 'John', age: 18 },
-        { name: 'Lilli', age: 23 },
-        { name: 'Lavera', age: 46 },
-        { name: 'Paul', age: 32 },
-        { name: 'Jene', age: 14 },
-        { name: 'Felipe', age: 42 },
-        { name: 'Shawn', age: 26 },
-        { name: 'Carey', age: 24 },
-        { name: 'Mark', age: 33 }
       ]
     };
   }
@@ -51,10 +42,6 @@ class HomeScreen extends Component {
   _onPressBurgerMenu = () => {
     console.log('in _onPressBurgerMenu')
     this.props.navigation.openDrawer()
-    // onPress={ this.props.navigation.openDrawer()}
-    // Alert.alert(
-    //   'Burger Menu'
-    // )
   }
 
   _onPressSearch = () => {
@@ -89,8 +76,8 @@ class HomeScreen extends Component {
     // this._getUser();
 
     // firebase.auth().onAuthStateChanged(user => {
-      // alert(user.uid);
-      // console.log("state change: ",user.uid)
+    //   alert(user.uid);
+    //   console.log("state change: ",user.uid)
     // })
     // const uid = firebase.auth().currentUser.uid
     // console.log("UID from current user: ",uid)
@@ -108,6 +95,7 @@ class HomeScreen extends Component {
                 imageUrl: "",
                 uid: firebase.auth().currentUser.uid
             });
+    // this.props.navigation.navigate('CreatePost')
   }
 
   render() {
@@ -119,13 +107,6 @@ class HomeScreen extends Component {
           onPressSearch={this._onPressSearch}
         />
 
-        {/* <FlatList
-          data={this.state.data}
-          renderItem={({ item }) => <View style={styles.list}>
-            <Text>Name : {item.name}</Text>
-            <Text>Age : {item.age}</Text>
-          </View>}
-        /> */}
         <ScrollView>
           <View>
             <Text>Hello</Text>
@@ -139,14 +120,23 @@ class HomeScreen extends Component {
             </Button>
 
             <Button full rounded style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
-              onPress={() => { this.props.navigation.navigate('ListPost') }}>
-              <Text>See all Post</Text>
+              onPress={() => { this.props.navigation.navigate('ListSellPost') }}>
+              <Text>See all Sell Post</Text>
+            </Button>
+
+            <Button full rounded style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
+              onPress={() => { this.props.navigation.navigate('ListDonatePost') }}>
+              <Text>See all Donate Post</Text>
             </Button>
 
             <Button full rounded style={{ marginTop: `5%`, marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
-              onPress={() => { this.props.navigation.navigate('MyPost') }}
-            >
-              <Text>My Post</Text>
+              onPress={() => { this.props.navigation.navigate('MySellPost') }}>
+              <Text>My Sell Post</Text>
+            </Button>
+
+            <Button full rounded style={{ marginTop: `5%`, marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
+              onPress={() => { this.props.navigation.navigate('MyDonatePost') }}>
+              <Text>My Donate Post</Text>
             </Button>
 
           </View>

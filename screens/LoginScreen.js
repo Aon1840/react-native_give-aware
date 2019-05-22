@@ -27,17 +27,6 @@ export default class LoginScreen extends Component {
         console.log("email: "+email+" ,password: "+password);
     
         if (email && password != "") {
-        //   try {
-        //     console.log("pass this line")
-        //     firebase.auth().signInWithEmailAndPassword(email, password);
-        //     firebase.auth().onAuthStateChanged(user => {
-        //     //   alert(user.email);
-        //       this.props.navigation.navigate('Home')
-        //     })
-        //   } catch (error) {
-        //     alert(error.toString(error))
-        //     console.log(error.toString(error));
-        //   }
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((data) => {
                 this.props.navigation.replace('Home')

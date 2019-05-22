@@ -7,7 +7,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 
 
 
-class MyPostScreen extends Component {
+class MySellPostScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -39,7 +39,7 @@ class MyPostScreen extends Component {
                     price: child.val().price,
                     imageUrl: child.val().imageUrl
                 });
-                console.log("-------------")
+
                 this.setState({
                     data: posts,
                 })
@@ -48,7 +48,7 @@ class MyPostScreen extends Component {
     }
 
     viewDetail = (key, name, area, province, description, price, imageUrl, uid) => {
-        this.props.navigation.navigate('CreatePost',
+        this.props.navigation.navigate('UpdateSellPost',
             {
                 key: key,
                 name: name,
@@ -59,6 +59,8 @@ class MyPostScreen extends Component {
                 imageUrl: imageUrl,
                 uid: uid
             });
+            console.log("key from viewDetail: ",key)
+            console.log("imageUrl from viewDetail: ",imageUrl)
     }
 
     checkForDelete = (key) => {
@@ -92,26 +94,20 @@ class MyPostScreen extends Component {
     extractKey = ({ name }) => name
 
     renderHiddenItem = ({ item }) => {
-        // console.log("UID -----: ",item)
         return (
             <View style={styles.rowBack}
                 onPress={ ()=> alert("hello")}>
                 <TouchableOpacity
-                    // onPress={() => this.deletePost(item.key)}
                     onPress={() => this.checkForDelete(item.key)}
                     style={styles.swipeRightRight}>
                     <Text style={styles.backTextWhite}>Delete</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => alert("edit")}
-                    style={styles.swipeRightLeft}>
-                    <Text style={styles.backTextWhite}>Edit</Text>
                 </TouchableOpacity>
             </View>
         )
     }
 
     renderItem = ({ item }) => {
+        console.log("---- MyPostScreen: ",item.key)
         return (
             <TouchableHighlight onPress={() => this.viewDetail(
                 item.key,
@@ -193,23 +189,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         right: 0,
     },
-    swipeRightLeft: {
-        color: 'white',
-        alignItems: 'center',
-        bottom: 0,
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 0,
-        marginTop: 8,
-        marginRight: 5,
-        height: 150,
-        width: 75,
-        backgroundColor: 'blue',
-        right: 75,
-    },
     backTextWhite: {
         color: '#FFF',
     },
 });
 
-export default MyPostScreen;
+export default MySellPostScreen;

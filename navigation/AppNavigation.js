@@ -3,11 +3,11 @@ import HomeScreen from '../screens/HomeScreen';
 // import HomeScreen2 from '../screens/HomeScreen2';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import ListPostScreen from '../screens/ListPostScreen';
+// import ListPostScreen from '../screens/ListPostScreen';
 import PostDetailScreen from '../screens/PostDetailScreen';
 import CreatePostScreen from '../screens/CreatPostScreen';
-import MyPostScreen from '../screens/MyPostScreen';
-import MyPostScreen2NoUse from '../screens/MyPostScreen2';
+import MyPostScreen from '../screens/MySellPostScreen';
+import MyPostScreen2NoUse from '../screens/MyDonatePostScreen';
 import MyNavigator from '../navigation/MyNavigator';
 
 

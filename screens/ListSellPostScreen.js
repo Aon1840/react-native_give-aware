@@ -9,7 +9,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 // const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 60 : 73;
 // const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-class ListPostScreen extends Component {
+class ListSellPostScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -140,26 +140,6 @@ class ListPostScreen extends Component {
                         renderItem={this.renderItem}
                         keyExtractor={this.extractKey}
                     />
-                    {/* <SwipeListView
-                        useFlatList
-                        data={this.state.data}
-                        renderItem={this.renderItem}
-                        renderHiddenItem={(data) => (
-                            <View style={styles.rowBack}>
-                                <TouchableOpacity
-                                    style={styles.swipeRight}>
-                                    <Text style={styles.backTextWhite}>Delete</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={ () => alert("edit") }
-                                    style={styles.swipeLeft}>
-                                    <Text style={styles.backTextWhite}>Edit</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                        leftOpenValue={75}
-                        rightOpenValue={-75}
-                    /> */}
                 </Content>
             </Container>
         );
@@ -197,4 +177,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ListPostScreen;
+export default ListSellPostScreen;

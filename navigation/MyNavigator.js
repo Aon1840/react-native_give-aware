@@ -3,11 +3,14 @@ import HomeScreen from '../screens/HomeScreen';
 // import HomeScreen2 from '../screens/HomeScreen2';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import ListPostScreen from '../screens/ListPostScreen';
+import ListSellPostScreen from '../screens/ListSellPostScreen';
 import PostDetailScreen from '../screens/PostDetailScreen';
 import CreatePostScreen from '../screens/CreatPostScreen';
-import MyPostScreen from '../screens/MyPostScreen';
-import MyPostScreen2NoUse from '../screens/MyPostScreen2';
+import MySellPostScreen from '../screens/MySellPostScreen';
+import MyDonatePostScreen from '../screens/MyDonatePostScreen';
+import UpdatePostSellScreen from '../screens/UpdatePostSellScreen';
+import UpdatePostDonateScreen from "../screens/UpdatePostDonateScreen";
+import ListDonatePostScreen from '../screens/ListDonatePostScreen';
 
 const AppNavigator = createStackNavigator(
     {
@@ -20,8 +23,11 @@ const AppNavigator = createStackNavigator(
         Register: {
             screen: RegisterScreen
         },
-        ListPost: {
-            screen: ListPostScreen
+        ListSellPost: {
+            screen: ListSellPostScreen
+        },
+        ListDonatePost: {
+            screen: ListDonatePostScreen
         },
         CreatePost: {
             screen: CreatePostScreen
@@ -29,11 +35,17 @@ const AppNavigator = createStackNavigator(
         PostDetail: {
             screen: PostDetailScreen
         },
-        MyPost: {
-            screen: MyPostScreen
+        MySellPost: {
+            screen: MySellPostScreen
         },
-        test: {
-            screen: MyPostScreen2NoUse
+        UpdateSellPost: {
+            screen: UpdatePostSellScreen
+        },
+        UpdateDonatePost: {
+            screen: UpdatePostDonateScreen
+        },
+        MyDonatePost: {
+            screen: MyDonatePostScreen
         }
     },
     {
