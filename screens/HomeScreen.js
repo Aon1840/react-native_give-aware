@@ -99,12 +99,14 @@ class HomeScreen extends Component {
   createPost(){
     this.props.navigation.navigate('CreatePost',
             {
+                key: "",
                 name: "",
                 area: "",
                 province: "",
                 description: "",
                 price: "",
-                imageUrl: ""
+                imageUrl: "",
+                uid: firebase.auth().currentUser.uid
             });
   }
 

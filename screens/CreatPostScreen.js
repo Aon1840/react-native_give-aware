@@ -10,12 +10,14 @@ class CreatePostScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            key: "",
             name: "",
             area: "",
             province: "",
             description: "",
             price: "",
             imageUrl: "",
+            uid: "",
             key: "",
         };
     }
@@ -30,17 +32,19 @@ class CreatePostScreen extends Component {
     componentWillMount() {
         if (this.props.navigation.state.params.view !== null) {
             this.setState({
+                key: this.props.navigation.state.params.key,
                 name: this.props.navigation.state.params.name,
                 area: this.props.navigation.state.params.area,
                 province: this.props.navigation.state.params.province,
                 description: this.props.navigation.state.params.description,
                 price: this.props.navigation.state.params.price,
-                imageUrl: this.props.navigation.state.params.imageUrl
+                imageUrl: this.props.navigation.state.params.imageUrl,
+                uid: this.props.navigation.state.params.uid
             })
         }
     }
 
-    createPost = (name, area, province, description, price, imageUrl) => {
+    createPost = (name, area, province, description, price, imageUrl, uid) => {
         if (name && area && province && description && price && imageUrl != null) {
             firebase.database().ref("/posts").push({
                 name,
@@ -49,6 +53,7 @@ class CreatePostScreen extends Component {
                 description,
                 price,
                 imageUrl,
+                uid,
             }).then((data) => {
                 console.log("------ Create Post Success: ", data);
                 this.props.navigation.navigate('ListPost')
@@ -56,43 +61,23 @@ class CreatePostScreen extends Component {
                 alert("error: ", error.message);
             });
         } else {
-            alert("Please enter detail");
+            alert("Please enter detail")
         }
     }
 
-    updatePost = (name, area, province, description, price, imageUrl) => {
+    updatePost = (key, name, area, province, description, price, imageUrl, uid) => {
+        console.log("-------- Hello this is from CreatePost key issss: ",key)
         if (name && area && province && description && price && imageUrl != null) {
-            // console.log("imageUrl -----: ",imageUrl);
-            firebase.database().ref("/posts").orderByChild('imageUrl').equalTo(imageUrl).on("value", snapshot => {
-                let post = [];
-                snapshot.forEach(child => {
-                    post.push({
-                        key: child.key,
-                        name: child.val().name,
-                        area: child.val().area,
-                        province: child.val().province,
-                        description: child.val().description,
-                        price: child.val().price,
-                        imageUrl: child.val().imageUrl
-                    });
-                })
-                console.log("post: ",post[0].key)
-                // console.log("post: ",post[1].key)
-                // this.setState({ key:post[0].key })
-                // console.log("key-----: ",this.state.key)
-
-                firebase.database().ref("/posts/"+post[0].key).update({
+                firebase.database().ref("/posts/"+key).update({
                     name,
                     area,
                     province,
                     description,
                     price,
                     imageUrl,
+                    uid,
                 });
-                post = []
                 this.props.navigation.replace('MyPost')
-            })
-
         } else {
             alert("Please enter detail");
         }
@@ -111,7 +96,7 @@ class CreatePostScreen extends Component {
 
 
     render() {
-        let { name, area, province, description, price, imageUrl } = this.state;
+        let { key, name, area, province, description, price, imageUrl, uid } = this.state;
         return (
 
             <Container style={styles.container}>
@@ -174,7 +159,7 @@ class CreatePostScreen extends Component {
                                 <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }} onPress={() => this.pickImage()}>
                                     <Text>อัพโหลดรูปภาพ</Text>
                                 </Button>
-                                <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.updatePost(name, area, province, description, price, imageUrl) }}>
+                                <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.updatePost(key, name, area, province, description, price, imageUrl) }}>
                                     <Text>บันทึกการเปลี่ยนแปลง</Text>
                                 </Button>
                             </View>
@@ -184,7 +169,7 @@ class CreatePostScreen extends Component {
                                 <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }} onPress={() => this.pickImage()}>
                                     <Text>อัพโหลดรูปภาพ</Text>
                                 </Button>
-                                <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.createPost(name, area, province, description, price, imageUrl) }}>
+                                <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.createPost(name, area, province, description, price, imageUrl, uid) }}>
                                     <Text>สร้างโพสต์</Text>
                                 </Button>
                             </View>

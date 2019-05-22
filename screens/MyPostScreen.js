@@ -14,7 +14,8 @@ class MyPostScreen extends Component {
         this.taskRef = firebase.database().ref("/posts");
         const data = [];
         this.state = {
-            data: data
+            data: data,
+            uid: ""
         };
     }
 
@@ -23,9 +24,10 @@ class MyPostScreen extends Component {
     }
 
     loadMyPost(taskRef) {
-        // const uid = firebase.auth().currentUser.uid
-        // console.log("UID: ",uid)
-        taskRef.orderByChild('uid').equalTo("9umDcfx7O2ZsRlg47xdpfn9EJUE3").on("value", snapshot => {
+        const uid = firebase.auth().currentUser.uid
+        this.setState({ uid:uid });
+        console.log("UID: ",uid)
+        taskRef.orderByChild('uid').equalTo(uid).on("value", snapshot => {
             var posts = [];
             snapshot.forEach(child => {
                 posts.push({
@@ -37,23 +39,25 @@ class MyPostScreen extends Component {
                     price: child.val().price,
                     imageUrl: child.val().imageUrl
                 });
-
+                console.log("-------------")
                 this.setState({
-                    data: posts
+                    data: posts,
                 })
             })
         })
     }
 
-    viewDetail = (name, area, province, description, price, imageUrl) => {
+    viewDetail = (key, name, area, province, description, price, imageUrl, uid) => {
         this.props.navigation.navigate('CreatePost',
             {
+                key: key,
                 name: name,
                 area: area,
                 province: province,
                 description: description,
                 price: price,
-                imageUrl: imageUrl
+                imageUrl: imageUrl,
+                uid: uid
             });
     }
 
@@ -110,12 +114,14 @@ class MyPostScreen extends Component {
     renderItem = ({ item }) => {
         return (
             <TouchableHighlight onPress={() => this.viewDetail(
+                item.key,
                 item.name,
                 item.area,
                 item.province,
                 item.description,
                 item.price,
-                item.imageUrl)} item={item}>
+                item.imageUrl,
+                this.state.uid)} item={item}>
                 <Card
                     style={{ height: 150 }}>
                     <CardItem >
