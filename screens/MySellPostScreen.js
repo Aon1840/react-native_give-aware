@@ -15,7 +15,7 @@ class MySellPostScreen extends Component {
         const data = [];
         this.state = {
             data: data,
-            uid: ""
+            uid: "",
         };
     }
 
@@ -46,6 +46,7 @@ class MySellPostScreen extends Component {
                     imageUrl: child.val().imageUrl,
                     uid: child.val().uid,
                     date: child.val().date,
+                    isReceive: child.val().isReceive,
                 });
 
                 this.setState({
@@ -55,7 +56,7 @@ class MySellPostScreen extends Component {
         })
     }
 
-    viewDetail = (key, name, area, province, description, price, imageUrl, uid, date) => {
+    viewDetail = (key, name, area, province, description, price, imageUrl, uid, date, isReceive) => {
         this.props.navigation.navigate('UpdateSellPost',
             {
                 key: key,
@@ -66,31 +67,32 @@ class MySellPostScreen extends Component {
                 price: price,
                 imageUrl: imageUrl,
                 uid: uid,
-                date: date
+                date: date,
+                isReceive: isReceive,
             });
-        console.log("key from viewDetail: ", key)
-        console.log("imageUrl from viewDetail: ", imageUrl)
     }
 
-    checkForDelete = (key) => {
-        console.log("key is from checkForDelete: ", key)
-        Alert.alert(
-            'คุณมั่นใจนะว่าจะลบ?',
-            'ถ้าลบมันจะโพสต์ของคุณจะหายไปจริงๆนะ',
-            [
-                { text: 'ลบ', onPress: () => this.deletePost(key) },
-                {
-                    text: 'ยกเลิก',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                },
-            ],
-            { cancelable: false },
-        );
+    checkForDelete = (key, isReceive) => {
+        if (isReceive == false) {
+            Alert.alert(
+                'คุณมั่นใจนะว่าจะลบ?',
+                'ถ้าลบมันจะโพสต์ของคุณจะหายไปจริงๆนะ',
+                [
+                    { text: 'ลบ', onPress: () => this.deletePost(key) },
+                    {
+                        text: 'ยกเลิก',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                ],
+                { cancelable: false },
+            );
+        } else {
+            alert("โพสต์นี้มีคนซื้อสินค้าแล้ว ไม่สามารถลบได้");
+        }
     }
 
     deletePost = (key) => {
-        console.log("key is from deletePost: ", key)
         firebase.database().ref('posts/' + key).remove()
             .then((data) => {
                 console.log("data from delete: ", data);
@@ -107,7 +109,7 @@ class MySellPostScreen extends Component {
             <View style={styles.rowBack}
                 onPress={() => alert("hello")}>
                 <TouchableOpacity
-                    onPress={() => this.checkForDelete(item.key)}
+                    onPress={() => this.checkForDelete(item.key, item.isReceive)}
                     style={styles.swipeRightRight}>
                     <Text style={styles.backTextWhite}>Delete</Text>
                 </TouchableOpacity>
@@ -127,7 +129,8 @@ class MySellPostScreen extends Component {
                 item.price,
                 item.imageUrl,
                 this.state.uid,
-                item.date)} item={item}>
+                item.date,
+                item.isReceive)} item={item}>
                 <Card
                     style={{ height: 150 }}>
                     <CardItem >

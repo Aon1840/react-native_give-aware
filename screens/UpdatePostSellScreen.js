@@ -17,6 +17,7 @@ class UpdatePostSellScreen extends Component {
             price: "",
             imageUrl: "",
             uid: "",
+            isReceive: "",
         };
     }
 
@@ -35,31 +36,30 @@ class UpdatePostSellScreen extends Component {
                 description: this.props.navigation.state.params.description,
                 price: this.props.navigation.state.params.price,
                 imageUrl: this.props.navigation.state.params.imageUrl,
-                uid: this.props.navigation.state.params.uid
+                uid: this.props.navigation.state.params.uid,
+                isReceive: this.props.navigation.state.params.isReceive,
             })
         }
-
-        console.log("Welcome to update: ", this.props.navigation.state.params.key)
-        console.log("Welcome to update: ", this.state.key)
-        console.log("This is imageUrl: ", this.props.navigation.state.params.imageUrl)
-        console.log("This is imageUrl: ", this.state.imageUrl)
     }
 
     updatePost = (key, name, area, province, description, price, imageUrl, uid) => {
-        console.log("-------- Hello this is from CreatePost key issss: ", key)
-        if (name && area && province && description && price && imageUrl != null) {
-            firebase.database().ref("/posts/" + key).update({
-                name,
-                area,
-                province,
-                description,
-                price,
-                imageUrl,
-                uid,
-            });
-            this.props.navigation.replace('MySellPost')
+        if (this.state.isReceive == false) {
+            if (name && area && province && description && price && imageUrl != null) {
+                firebase.database().ref("/posts/" + key).update({
+                    name,
+                    area,
+                    province,
+                    description,
+                    price,
+                    imageUrl,
+                    uid,
+                });
+                this.props.navigation.replace('MySellPost')
+            } else {
+                alert("กรุณากรอกข้อมูลให้ครบ");
+            }
         } else {
-            alert("Please enter detail");
+            alert("โพสต์นี้มีคนซื้อแล้ว ไม่สามารถแก้ไขได้");
         }
     }
 

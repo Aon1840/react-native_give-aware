@@ -46,6 +46,7 @@ class MyDonatePostScreen extends Component {
                     isReceive: child.val().isReceive,
                     uid: child.val().uid,
                     date: child.val().date,
+                    isReceive: child.val().isReceive,
                 });
 
                 this.setState({
@@ -55,7 +56,7 @@ class MyDonatePostScreen extends Component {
         })
     }
 
-    viewDetail = (key, name, area, province, description, imageUrl, uid, date) => {
+    viewDetail = (key, name, area, province, description, imageUrl, uid, date, isReceive) => {
         this.props.navigation.navigate('UpdateDonatePost',
             {
                 key: key,
@@ -66,28 +67,31 @@ class MyDonatePostScreen extends Component {
                 imageUrl: imageUrl,
                 uid: uid,
                 date: date,
+                isReceive: isReceive,
             });
     }
 
-    checkForDelete = (key) => {
-        console.log("key is from checkForDelete: ", key)
-        Alert.alert(
-            'คุณมั่นใจนะว่าจะลบ?',
-            'ถ้าลบมันจะโพสต์ของคุณจะหายไปจริงๆนะ',
-            [
-                { text: 'ลบ', onPress: () => this.deletePost(key) },
-                {
-                    text: 'ยกเลิก',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                },
-            ],
-            { cancelable: false },
-        );
+    checkForDelete = (key, isReceive) => {
+        if (isReceive == false) {
+            Alert.alert(
+                'คุณมั่นใจนะว่าจะลบ?',
+                'ถ้าลบมันจะโพสต์ของคุณจะหายไปจริงๆนะ',
+                [
+                    { text: 'ลบ', onPress: () => this.deletePost(key) },
+                    {
+                        text: 'ยกเลิก',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                ],
+                { cancelable: false },
+            );
+        } else {
+            alert("โพสต์นี้มีคนรับบริจาคแล้ว ไม่สามารถลบได้");
+        }
     }
 
     deletePost = (key) => {
-        console.log("key is from deletePost: ", key)
         firebase.database().ref('donateposts/' + key).remove()
             .then((data) => {
                 console.log("data from delete: ", data);
@@ -104,7 +108,7 @@ class MyDonatePostScreen extends Component {
             <View style={styles.rowBack}
                 onPress={() => alert("hello")}>
                 <TouchableOpacity
-                    onPress={() => this.checkForDelete(item.key)}
+                    onPress={() => this.checkForDelete(item.key, item.isReceive)}
                     style={styles.swipeRightRight}>
                     <Text style={styles.backTextWhite}>Delete</Text>
                 </TouchableOpacity>
@@ -122,7 +126,8 @@ class MyDonatePostScreen extends Component {
                 item.description,
                 item.imageUrl,
                 this.state.uid,
-                item.date)} item={item}>
+                item.date,
+                item.isReceive)} item={item}>
                 <Card
                     style={{ height: 150 }}>
                     <CardItem >

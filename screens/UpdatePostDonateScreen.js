@@ -16,6 +16,7 @@ class UpdatePostDonateScreen extends Component {
       description: "",
       imageUrl: "",
       uid: "",
+      isReceive: "",
     };
   }
 
@@ -35,25 +36,29 @@ class UpdatePostDonateScreen extends Component {
         province: this.props.navigation.state.params.province,
         description: this.props.navigation.state.params.description,
         imageUrl: this.props.navigation.state.params.imageUrl,
-        uid: this.props.navigation.state.params.uid
+        uid: this.props.navigation.state.params.uid,
+        isReceive: this.props.navigation.state.params.isReceive,
       })
     }
   }
 
   updatePost = (key, name, area, province, description, imageUrl, uid) => {
-    console.log("-------- Hello this is from CreatePost key issss: ", key)
-    if (name && area && province && description && imageUrl != null) {
-      firebase.database().ref("/donateposts/" + key).update({
-        name,
-        area,
-        province,
-        description,
-        imageUrl,
-        uid,
-      });
-      this.props.navigation.replace('MyDonatePost')
+    if (this.state.isReceive == false) {
+      if (name && area && province && description && imageUrl != null) {
+        firebase.database().ref("/donateposts/" + key).update({
+          name,
+          area,
+          province,
+          description,
+          imageUrl,
+          uid,
+        });
+        this.props.navigation.replace('MyDonatePost')
+      } else {
+        alert("กรุณากรอกข้อมูลให้ครบ");
+      }
     } else {
-      alert("Please enter detail");
+      alert("โพสต์นี้มีคนรับบริจาคแล้ว ไม่สามารถแก้ไขได้");
     }
   }
 
@@ -121,7 +126,7 @@ class UpdatePostDonateScreen extends Component {
                 <Text>บันทึกการเปลี่ยนแปลง</Text>
               </Button>
             </View>
-            
+
           </Form>
         </ScrollView>
       </Container>
