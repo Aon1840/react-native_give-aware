@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, FlatList, TouchableHighlight, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Image, FlatList, TouchableHighlight, TouchableOpacity, View, StyleSheet, Alert } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import * as firebase from 'firebase';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -18,6 +18,10 @@ class ListDonatePostScreen extends Component {
         this.listtenForNewPost(this.taskRef);
     }
 
+    componentWillUnmount(){
+        this.listtenForNewPost(this.taskRef);
+    }
+
     listtenForNewPost(taskRef) {
         taskRef.on("value", snapshot => {
             var posts = [];
@@ -28,11 +32,13 @@ class ListDonatePostScreen extends Component {
                     area: child.val().area,
                     province: child.val().province,
                     description: child.val().description,
-                    imageUrl: child.val().imageUrl
+                    imageUrl: child.val().imageUrl,
+                    isReceive: child.val().isReceive,
+                    uid: child.val().uid,
                 });
-
+                const available_post = posts.filter(x => x.isReceive === false)
                 this.setState({
-                    data: posts
+                    data: available_post
                 })
             })
         })
@@ -48,6 +54,35 @@ class ListDonatePostScreen extends Component {
                 price: price,
                 imageUrl: imageUrl
             });
+    }
+
+    checkForDonate = (key) => {
+        console.log("------ key: ",key)
+        Alert.alert(
+            'คุณมั่นใจนะว่าจะรับบริจาคชิ้นนี้?',
+            'เมื่อกดแล้วสินจะไปอยู่ในประวัติการรับบริจาค',
+            [
+                {text: 'ตกลง', onPress: () => this.receiveDonatePost(key) },
+                {
+                    text: 'ยกเลิก',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                }
+            ],
+            {cancelable: false}
+        )
+    }
+
+    receiveDonatePost = (key) => {
+        firebase.database().ref('donateposts/'+key).update({
+            receiverID: firebase.auth().currentUser.uid,
+            isReceive: true
+        }).then( (data) => {
+            console.log("data when press sell post : ",data)
+            alert("Succcess!")
+        }).catch( (error) => {
+            alert(error.message)
+        })
     }
 
     extractKey = ({ name }) => name
@@ -72,6 +107,7 @@ class ListDonatePostScreen extends Component {
                                 {/* <Text note>{item.data}</Text> */}
                                 {/* <Text note>{item.owner}</Text> */}
                                 <TouchableHighlight
+                                    onPress = {()=> this.checkForDonate(item.key)}
                                     style={{
                                         marginTop: 30,
                                         alignSelf: 'flex-end',
@@ -88,7 +124,7 @@ class ListDonatePostScreen extends Component {
                                         textAlign: 'center',
                                         justifyContent: 'center',
                                     }}>
-                                        ซื้อสินค้า
+                                        รับบริจาค
                                 </Text>
                                 </TouchableHighlight>
                             </Body>

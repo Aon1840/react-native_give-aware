@@ -11,6 +11,8 @@ import MyDonatePostScreen from '../screens/MyDonatePostScreen';
 import UpdatePostSellScreen from '../screens/UpdatePostSellScreen';
 import UpdatePostDonateScreen from "../screens/UpdatePostDonateScreen";
 import ListDonatePostScreen from '../screens/ListDonatePostScreen';
+import HistoryReceiveDonatePostScreen from '../screens/HistoryReceiveDonatePostScreen';
+import HistoryReceiveSellPostScreen from '../screens/HistoryReceiveSellPostScreen';
 
 const AppNavigator = createStackNavigator(
     {
@@ -46,6 +48,12 @@ const AppNavigator = createStackNavigator(
         },
         MyDonatePost: {
             screen: MyDonatePostScreen
+        },
+        HistorySellPost: {
+            screen: HistoryReceiveSellPostScreen
+        },
+        HistoryDonatePost: {
+            screen: HistoryReceiveDonatePostScreen
         }
     },
     {

@@ -23,7 +23,6 @@ class HomeScreen extends Component {
     this.state = {
       user: "",
       scrollY: new Animated.Value(
-        // iOS has negative initial scroll value because content inset...
         Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT : 0,
       ),
       // refreshing: false,
@@ -61,26 +60,7 @@ class HomeScreen extends Component {
     });
   }
 
-  // _getUser = () => {
-  //   firebase.auth().onAuthStateChanged(user => {
-  //     this.setState({
-  //       user: user
-  //     })
-  //     // alert(user.email);
-  //     console.log("User: ", user);
-  //     console.log("UID User: ", user.uid);
-  //   })
-  // }
-
   componentDidMount() {
-    // this._getUser();
-
-    // firebase.auth().onAuthStateChanged(user => {
-    //   alert(user.uid);
-    //   console.log("state change: ",user.uid)
-    // })
-    // const uid = firebase.auth().currentUser.uid
-    // console.log("UID from current user: ",uid)
   }
 
   createPost(){
@@ -95,14 +75,12 @@ class HomeScreen extends Component {
                 imageUrl: "",
                 uid: firebase.auth().currentUser.uid
             });
-    // this.props.navigation.navigate('CreatePost')
   }
 
   render() {
     return (
       <View style={styles.container}>
         <Header onPressBack={this._onPressBack}
-          // onPressBurgerMenu = { this.props.navigation.openDrawer()}
           onPressBurgerMenu={this._onPressBurgerMenu}
           onPressSearch={this._onPressSearch}
         />
@@ -114,29 +92,39 @@ class HomeScreen extends Component {
             <Text>Hello</Text>
             
 
-            <Button full rounded style={{ marginLeft: `5%`, marginRight: `5%` }}
+            <Button full rounded danger style={{ marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this._logout() }}>
-              <Text>Logout</Text>
+              <Text style={{color:'white'}}>Logout</Text>
             </Button>
 
             <Button full rounded style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('ListSellPost') }}>
-              <Text>See all Sell Post</Text>
+              <Text style={{color:'white'}}>See all Sell Post</Text>
             </Button>
 
             <Button full rounded style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('ListDonatePost') }}>
-              <Text>See all Donate Post</Text>
+              <Text style={{color:'white'}}>See all Donate Post</Text>
             </Button>
 
-            <Button full rounded style={{ marginTop: `5%`, marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
+            <Button full rounded success style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('MySellPost') }}>
-              <Text>My Sell Post</Text>
+              <Text style={{color:'white'}}>My Sell Post</Text>
             </Button>
 
-            <Button full rounded style={{ marginTop: `5%`, marginBottom: `10%`, marginLeft: `5%`, marginRight: `5%` }}
+            <Button full rounded success style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('MyDonatePost') }}>
-              <Text>My Donate Post</Text>
+              <Text style={{color:'white'}}>My Donate Post</Text>
+            </Button>
+
+            <Button full rounded warning style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
+              onPress={() => { this.props.navigation.navigate('HistorySellPost') }}>
+              <Text style={{color:'white'}}>History Sell Post</Text>
+            </Button>
+
+            <Button full rounded warning style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
+              onPress={() => { this.props.navigation.navigate('HistoryDonatePost') }}>
+              <Text style={{color:'white'}}>History Donate Post</Text>
             </Button>
 
           </View>

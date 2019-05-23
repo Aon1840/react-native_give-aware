@@ -5,8 +5,6 @@ import { Constants, ImagePicker, Permissions } from 'expo';
 import uuid from 'uuid';
 import * as firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
-import Tab1 from './UpdatePostSellScreen';
-import Tab2 from './UpdatePostDonateScreen';
 
 class CreatePostScreen extends Component {
     constructor(props) {
@@ -46,7 +44,8 @@ class CreatePostScreen extends Component {
     }
 
     createSellPost = (name, area, province, description, price, imageUrl, uid) => {
-        if (name && area && province && description && price && imageUrl != null) {
+        console.log("image url from create sell post: ",imageUrl)
+        if (name && area && province && description && price && imageUrl != "") {
             firebase.database().ref("/posts").push({
                 name,
                 area,
@@ -85,24 +84,6 @@ class CreatePostScreen extends Component {
             alert("Please enter detail")
         }
     }
-
-    // updatePost = (key, name, area, province, description, price, imageUrl, uid) => {
-    //     console.log("-------- Hello this is from CreatePost key issss: ",key)
-    //     if (name && area && province && description && price && imageUrl != null) {
-    //             firebase.database().ref("/posts/"+key).update({
-    //                 name,
-    //                 area,
-    //                 province,
-    //                 description,
-    //                 price,
-    //                 imageUrl,
-    //                 uid,
-    //             });
-    //             this.props.navigation.replace('MyPost')
-    //     } else {
-    //         alert("Please enter detail");
-    //     }
-    // }
 
     pickImage = async () => {
         let pickerResult = await ImagePicker.launchImageLibraryAsync({

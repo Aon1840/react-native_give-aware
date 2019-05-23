@@ -166,7 +166,7 @@ class MySellPostScreen extends Component {
                         data={this.state.data}
                         renderItem={this.renderItem}
                         renderHiddenItem={this.renderHiddenItem}
-                        rightOpenValue={-150}
+                        rightOpenValue={-75}
                     />
                 </Content>
             </Container>
