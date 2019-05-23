@@ -19,15 +19,15 @@ class ListSellPostScreen extends Component {
 
     componentDidMount() {
         this.listtenForNewPost(this.taskRef);
-        this.focusListener = this.props.navigation.addListener("didFocus", () => {
-            this.listtenForNewPost(this.taskRef);
-        })
+        // this.focusListener = this.props.navigation.addListener("didFocus", () => {
+        //     this.listtenForNewPost(this.taskRef);
+        // })
     }
 
     componentWillMount(){
-        this.focusListener = this.props.navigation.addListener("didFocus", () => {
-            this.listtenForNewPost(this.taskRef);
-        })
+        // this.focusListener = this.props.navigation.addListener("didFocus", () => {
+        //     this.listtenForNewPost(this.taskRef);
+        // })
     }
 
     componentWillUnmount(){
