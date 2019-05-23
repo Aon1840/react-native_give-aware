@@ -53,30 +53,33 @@ class HomeScreen extends Component {
 
   _logout = async () => {
     await this.props.navigation.replace('Login');
-    await firebase.auth().signOut().then(function() {
+    await firebase.auth().signOut().then(function () {
       console.log('Signed Out');
-    }, function(error) {
+    }, function (error) {
       console.error('Sign Out Error', error);
     });
   }
 
   componentDidMount() {
-    console.log("name: ",firebase.auth().currentUser)
-    console.log("name: ",firebase.auth().currentUser.name)
+    var userId = firebase.auth().currentUser.uid;
+    firebase.database().ref('/Users/' + userId).on("value", snapshot => {
+      console.log("snap shot: ",snapshot)
+      console.log("name of user : ",snapshot.val().firstname)
+    })
   }
 
-  createPost(){
+  createPost() {
     this.props.navigation.navigate('CreatePost',
-            {
-                key: "",
-                name: "",
-                area: "",
-                province: "",
-                description: "",
-                price: "",
-                imageUrl: "",
-                uid: firebase.auth().currentUser.uid
-            });
+      {
+        key: "",
+        name: "",
+        area: "",
+        province: "",
+        description: "",
+        price: "",
+        imageUrl: "",
+        uid: firebase.auth().currentUser.uid
+      });
   }
 
   render() {
@@ -92,41 +95,41 @@ class HomeScreen extends Component {
             <Text>Hello</Text>
             <Text>Hello</Text>
             <Text>Hello</Text>
-            
+
 
             <Button full rounded danger style={{ marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this._logout() }}>
-              <Text style={{color:'white'}}>Logout</Text>
+              <Text style={{ color: 'white' }}>Logout</Text>
             </Button>
 
             <Button full rounded style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('ListSellPost') }}>
-              <Text style={{color:'white'}}>See all Sell Post</Text>
+              <Text style={{ color: 'white' }}>See all Sell Post</Text>
             </Button>
 
             <Button full rounded style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('ListDonatePost') }}>
-              <Text style={{color:'white'}}>See all Donate Post</Text>
+              <Text style={{ color: 'white' }}>See all Donate Post</Text>
             </Button>
 
             <Button full rounded success style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('MySellPost') }}>
-              <Text style={{color:'white'}}>My Sell Post</Text>
+              <Text style={{ color: 'white' }}>My Sell Post</Text>
             </Button>
 
             <Button full rounded success style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('MyDonatePost') }}>
-              <Text style={{color:'white'}}>My Donate Post</Text>
+              <Text style={{ color: 'white' }}>My Donate Post</Text>
             </Button>
 
             <Button full rounded warning style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('HistorySellPost') }}>
-              <Text style={{color:'white'}}>History Sell Post</Text>
+              <Text style={{ color: 'white' }}>History Sell Post</Text>
             </Button>
 
             <Button full rounded warning style={{ marginTop: `5%`, marginLeft: `5%`, marginRight: `5%` }}
               onPress={() => { this.props.navigation.navigate('HistoryDonatePost') }}>
-              <Text style={{color:'white'}}>History Donate Post</Text>
+              <Text style={{ color: 'white' }}>History Donate Post</Text>
             </Button>
 
           </View>

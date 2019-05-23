@@ -19,18 +19,9 @@ class ListSellPostScreen extends Component {
 
     componentDidMount() {
         this.listtenForNewPost(this.taskRef);
-        // this.focusListener = this.props.navigation.addListener("didFocus", () => {
-        //     this.listtenForNewPost(this.taskRef);
-        // })
     }
 
-    componentWillMount(){
-        // this.focusListener = this.props.navigation.addListener("didFocus", () => {
-        //     this.listtenForNewPost(this.taskRef);
-        // })
-    }
-
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.focusListener = this.props.navigation.addListener("didFocus", () => {
             this.listtenForNewPost(this.taskRef);
         })
@@ -106,7 +97,7 @@ class ListSellPostScreen extends Component {
     extractKey = ({ name }) => name
 
     renderItem = ({ item }) => {
-        // const owner = firebase.auth().currentUser
+
         return (
             <TouchableOpacity onPress={() => this.viewDetail(
                 item.name,
@@ -125,6 +116,7 @@ class ListSellPostScreen extends Component {
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
                                 <Text note>{item.province}</Text>
+                                <Text note>{item.price}</Text>
                                 <Text note>{item.date}</Text>
                                 {/* <Text note>{item.owner}</Text> */}
                                 <TouchableHighlight
@@ -160,11 +152,15 @@ class ListSellPostScreen extends Component {
         return (
             <Container>
                 <Content>
-                    <FlatList
-                        data={this.state.data}
-                        renderItem={this.renderItem}
-                        keyExtractor={this.extractKey}
-                    />
+                    {this.state.data == "" ?
+                        <Image source={require("../images/noPostYet.jpg")} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                        :
+                        <FlatList
+                            data={this.state.data}
+                            renderItem={this.renderItem}
+                            keyExtractor={this.extractKey}
+                        />
+                    }
                 </Content>
             </Container>
         );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, FlatList, TouchableHighlight, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Image, FlatList, TouchableHighlight, TouchableOpacity, View, StyleSheet, Alert } from 'react-native';
 import { Container, SwipeRow, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 import YellowButton from '../components/YellowButton';
 import * as firebase from 'firebase';
@@ -20,6 +20,12 @@ class MyDonatePostScreen extends Component {
 
     componentDidMount() {
         this.loadMyPost(this.taskRef);
+    }
+
+    componentWillUnmount() {
+        this.focusListener = this.props.navigation.addListener("didFocus", () => {
+            this.loadMyPost(this.taskRef);
+        })
     }
 
     loadMyPost(taskRef) {
@@ -81,12 +87,12 @@ class MyDonatePostScreen extends Component {
     }
 
     deletePost = (key) => {
-        console.log("key is from deletePost: ",key)
-        firebase.database().ref('donateposts/'+key).remove()
-            .then( (data) => {
-                console.log("data from delete: ",data);
+        console.log("key is from deletePost: ", key)
+        firebase.database().ref('donateposts/' + key).remove()
+            .then((data) => {
+                console.log("data from delete: ", data);
                 alert("Delete Success!")
-            }).catch( (error) => {
+            }).catch((error) => {
                 alert(error.message)
             })
     }
@@ -140,13 +146,17 @@ class MyDonatePostScreen extends Component {
         return (
             <Container>
                 <Content>
-                    <SwipeListView
-                        useFlatList
-                        data={this.state.data}
-                        renderItem={this.renderItem}
-                        renderHiddenItem={this.renderHiddenItem}
-                        rightOpenValue={-75}
-                    />
+                    {this.state.data == "" ?
+                        <Image source={require("../images/noPostYet.jpg")} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                        :
+                        <SwipeListView
+                            useFlatList
+                            data={this.state.data}
+                            renderItem={this.renderItem}
+                            renderHiddenItem={this.renderHiddenItem}
+                            rightOpenValue={-75}
+                        />
+                    }
                 </Content>
             </Container>
         );

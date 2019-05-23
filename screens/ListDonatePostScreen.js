@@ -16,18 +16,9 @@ class ListDonatePostScreen extends Component {
 
     componentDidMount() {
         this.listtenForNewPost(this.taskRef);
-        // this.focusListener = this.props.navigation.addListener("didFocus", () => {
-        //     this.listtenForNewPost(this.taskRef);
-        // })
     }
 
-    componentWillMount(){
-        // this.focusListener = this.props.navigation.addListener("didFocus", () => {
-        //     this.listtenForNewPost(this.taskRef);
-        // })
-    }
-
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.focusListener = this.props.navigation.addListener("didFocus", () => {
             this.listtenForNewPost(this.taskRef);
         })
@@ -71,30 +62,29 @@ class ListDonatePostScreen extends Component {
     }
 
     checkForDonate = (key) => {
-        console.log("------ key: ",key)
         Alert.alert(
             'คุณมั่นใจนะว่าจะรับบริจาคชิ้นนี้?',
             'เมื่อกดแล้วสินจะไปอยู่ในประวัติการรับบริจาค',
             [
-                {text: 'ตกลง', onPress: () => this.receiveDonatePost(key) },
+                { text: 'ตกลง', onPress: () => this.receiveDonatePost(key) },
                 {
                     text: 'ยกเลิก',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel'
                 }
             ],
-            {cancelable: false}
+            { cancelable: false }
         )
     }
 
     receiveDonatePost = (key) => {
-        firebase.database().ref('donateposts/'+key).update({
+        firebase.database().ref('donateposts/' + key).update({
             receiverID: firebase.auth().currentUser.uid,
             isReceive: true
-        }).then( (data) => {
-            console.log("data when press sell post : ",data)
+        }).then((data) => {
+            console.log("data when press sell post : ", data)
             alert("Succcess!")
-        }).catch( (error) => {
+        }).catch((error) => {
             alert(error.message)
         })
     }
@@ -123,7 +113,7 @@ class ListDonatePostScreen extends Component {
                                 <Text note>{item.date}</Text>
                                 {/* <Text note>{item.owner}</Text> */}
                                 <TouchableHighlight
-                                    onPress = {()=> this.checkForDonate(item.key)}
+                                    onPress={() => this.checkForDonate(item.key)}
                                     style={{
                                         marginTop: 30,
                                         alignSelf: 'flex-end',
@@ -154,15 +144,19 @@ class ListDonatePostScreen extends Component {
     render() {
         return (
             <Container>
-            {/* <Header /> */}
-            <Content>
-                <FlatList
-                    data={this.state.data}
-                    renderItem={this.renderItem}
-                    keyExtractor={this.extractKey}
-                />
-            </Content>
-        </Container>
+                {/* <Header /> */}
+                <Content>
+                    {this.state.date == "" ?
+                        <Image source={require("../images/noPostYet.jpg")} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                        :
+                        <FlatList
+                            data={this.state.data}
+                            renderItem={this.renderItem}
+                            keyExtractor={this.extractKey}
+                        />
+                    }
+                </Content>
+            </Container>
         );
     }
 }

@@ -23,10 +23,16 @@ class MySellPostScreen extends Component {
         this.loadMyPost(this.taskRef);
     }
 
+    componentWillUnmount() {
+        this.focusListener = this.props.navigation.addListener("didFocus", () => {
+            this.loadMyPost(this.taskRef);
+        })
+    }
+
     loadMyPost(taskRef) {
         const uid = firebase.auth().currentUser.uid
-        this.setState({ uid:uid });
-        console.log("UID: ",uid)
+        this.setState({ uid: uid });
+        console.log("UID: ", uid)
         taskRef.orderByChild('uid').equalTo(uid).on("value", snapshot => {
             var posts = [];
             snapshot.forEach(child => {
@@ -62,34 +68,34 @@ class MySellPostScreen extends Component {
                 uid: uid,
                 date: date
             });
-            console.log("key from viewDetail: ",key)
-            console.log("imageUrl from viewDetail: ",imageUrl)
+        console.log("key from viewDetail: ", key)
+        console.log("imageUrl from viewDetail: ", imageUrl)
     }
 
     checkForDelete = (key) => {
-        console.log("key is from checkForDelete: ",key)
+        console.log("key is from checkForDelete: ", key)
         Alert.alert(
             'คุณมั่นใจนะว่าจะลบ?',
             'ถ้าลบมันจะโพสต์ของคุณจะหายไปจริงๆนะ',
             [
-              {text: 'ลบ', onPress: () => this.deletePost(key) },
-              {
-                text: 'ยกเลิก',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
+                { text: 'ลบ', onPress: () => this.deletePost(key) },
+                {
+                    text: 'ยกเลิก',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
             ],
-            {cancelable: false},
-          );
+            { cancelable: false },
+        );
     }
 
     deletePost = (key) => {
-        console.log("key is from deletePost: ",key)
-        firebase.database().ref('posts/'+key).remove()
-            .then( (data) => {
-                console.log("data from delete: ",data);
+        console.log("key is from deletePost: ", key)
+        firebase.database().ref('posts/' + key).remove()
+            .then((data) => {
+                console.log("data from delete: ", data);
                 alert("Delete Success!")
-            }).catch( (error) => {
+            }).catch((error) => {
                 alert(error.message)
             })
     }
@@ -99,7 +105,7 @@ class MySellPostScreen extends Component {
     renderHiddenItem = ({ item }) => {
         return (
             <View style={styles.rowBack}
-                onPress={ ()=> alert("hello")}>
+                onPress={() => alert("hello")}>
                 <TouchableOpacity
                     onPress={() => this.checkForDelete(item.key)}
                     style={styles.swipeRightRight}>
@@ -110,7 +116,7 @@ class MySellPostScreen extends Component {
     }
 
     renderItem = ({ item }) => {
-        console.log("---- MyPostScreen: ",item.key)
+        console.log("---- MyPostScreen: ", item.key)
         return (
             <TouchableHighlight onPress={() => this.viewDetail(
                 item.key,
@@ -131,6 +137,7 @@ class MySellPostScreen extends Component {
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
                                 <Text note>{item.province}</Text>
+                                <Text note>{item.price}</Text>
                                 <Text note>{item.date}</Text>
                                 {/* <Text note>{item.owner}</Text> */}
                             </Body>
@@ -145,13 +152,17 @@ class MySellPostScreen extends Component {
         return (
             <Container>
                 <Content>
-                    <SwipeListView
-                        useFlatList
-                        data={this.state.data}
-                        renderItem={this.renderItem}
-                        renderHiddenItem={this.renderHiddenItem}
-                        rightOpenValue={-75}
-                    />
+                    {this.state.data == "" ?
+                        <Image source={require("../images/noPostYet.jpg")} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                        :
+                        <SwipeListView
+                            useFlatList
+                            data={this.state.data}
+                            renderItem={this.renderItem}
+                            renderHiddenItem={this.renderHiddenItem}
+                            rightOpenValue={-75}
+                        />
+                    }
                 </Content>
             </Container>
         );

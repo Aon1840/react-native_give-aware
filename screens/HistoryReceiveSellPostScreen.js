@@ -57,6 +57,7 @@ class HistoryReceiveSellPostScreen extends Component {
                 item.area,
                 item.province,
                 item.description,
+                item.price,
                 item.imageUrl,
                 item.uid,
                 item.date)} item={item}>
@@ -68,29 +69,8 @@ class HistoryReceiveSellPostScreen extends Component {
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
                                 <Text note>{item.province}</Text>
+                                <Text note>{item.price}</Text>
                                 <Text note>{item.date}</Text>
-                                {/* <Text note>{item.owner}</Text> */}
-                                {/* <TouchableHighlight
-                                    onPress={()=> this.checkForSell(item.key)}
-                                    style={{
-                                        marginTop: 30,
-                                        alignSelf: 'flex-end',
-                                        backgroundColor: "#F9A622",
-                                        borderRadius: 30,
-                                        width: 100,
-                                        height: 35,
-                                        justifyContent: 'center'
-                                    }}>
-
-                                    <Text style={{
-                                        color: 'white',
-                                        fontWeight: 'bold',
-                                        textAlign: 'center',
-                                        justifyContent: 'center',
-                                    }}>
-                                        ซื้อสินค้า
-                                </Text>
-                                </TouchableHighlight> */}
                             </Body>
                         </Left>
                     </CardItem>
@@ -99,13 +79,14 @@ class HistoryReceiveSellPostScreen extends Component {
         )
     }
 
-    viewDetail = (name, area, province, description, imageUrl, uid, date) => {
+    viewDetail = (name, area, province, description, price, imageUrl, uid, date) => {
         this.props.navigation.navigate('PostDetail',
             {
                 name: name,
                 area: area,
                 province: province,
                 description: description,
+                price: price,
                 imageUrl: imageUrl,
                 uid: uid,
                 date: date,
@@ -115,14 +96,18 @@ class HistoryReceiveSellPostScreen extends Component {
     render() {
         return (
             <Container>
-            <Content>
-                <FlatList
-                    data={this.state.data}
-                    renderItem={this.renderItem}
-                    keyExtractor={this.extractKey}
-                />
-            </Content>
-        </Container>
+                <Content>
+                    {this.state.data == "" ?
+                        <Image source={require("../images/noPostYet.jpg")} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                        :
+                        <FlatList
+                            data={this.state.data}
+                            renderItem={this.renderItem}
+                            keyExtractor={this.extractKey}
+                        />
+                    }
+                </Content>
+            </Container>
         );
     }
 }
