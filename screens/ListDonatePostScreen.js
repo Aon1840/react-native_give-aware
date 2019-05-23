@@ -16,10 +16,21 @@ class ListDonatePostScreen extends Component {
 
     componentDidMount() {
         this.listtenForNewPost(this.taskRef);
+        this.focusListener = this.props.navigation.addListener("didFocus", () => {
+            this.listtenForNewPost(this.taskRef);
+        })
+    }
+
+    componentWillMount(){
+        this.focusListener = this.props.navigation.addListener("didFocus", () => {
+            this.listtenForNewPost(this.taskRef);
+        })
     }
 
     componentWillUnmount(){
-        this.listtenForNewPost(this.taskRef);
+        this.focusListener = this.props.navigation.addListener("didFocus", () => {
+            this.listtenForNewPost(this.taskRef);
+        })
     }
 
     listtenForNewPost(taskRef) {
@@ -35,16 +46,17 @@ class ListDonatePostScreen extends Component {
                     imageUrl: child.val().imageUrl,
                     isReceive: child.val().isReceive,
                     uid: child.val().uid,
+                    date: child.val().date,
                 });
-                const available_post = posts.filter(x => x.isReceive === false)
-                this.setState({
-                    data: available_post
-                })
+            })
+            const available_post = posts.filter(x => x.isReceive === false)
+            this.setState({
+                data: available_post
             })
         })
     }
 
-    viewDetail = (name, area, province, description, price, imageUrl) => {
+    viewDetail = (name, area, province, description, price, imageUrl, uid, date) => {
         this.props.navigation.navigate('PostDetail',
             {
                 name: name,
@@ -52,7 +64,9 @@ class ListDonatePostScreen extends Component {
                 province: province,
                 description: description,
                 price: price,
-                imageUrl: imageUrl
+                imageUrl: imageUrl,
+                uid: uid,
+                date: date,
             });
     }
 
@@ -95,7 +109,9 @@ class ListDonatePostScreen extends Component {
                 item.province,
                 item.description,
                 item.price,
-                item.imageUrl)} item={item}>
+                item.imageUrl,
+                item.uid,
+                item.date)} item={item}>
                 <Card style={{ height: 150 }}>
                     <CardItem>
                         <Left>
@@ -104,7 +120,7 @@ class ListDonatePostScreen extends Component {
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
                                 <Text note>{item.province}</Text>
-                                {/* <Text note>{item.data}</Text> */}
+                                <Text note>{item.date}</Text>
                                 {/* <Text note>{item.owner}</Text> */}
                                 <TouchableHighlight
                                     onPress = {()=> this.checkForDonate(item.key)}

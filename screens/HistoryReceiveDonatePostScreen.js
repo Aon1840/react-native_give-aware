@@ -36,6 +36,7 @@ class HistoryReceiveDonatePostScreen extends Component {
                     isReceive: child.val().isReceive,
                     uid: child.val().uid,
                     receiverID: child.val().receiverID,
+                    date: child.val().date,
                 });
 
             })
@@ -55,7 +56,9 @@ class HistoryReceiveDonatePostScreen extends Component {
                 item.area,
                 item.province,
                 item.description,
-                item.imageUrl)} item={item}>
+                item.imageUrl,
+                item.uid,
+                item.date)} item={item}>
                 <Card style={{ height: 150 }}>
                     <CardItem>
                         <Left>
@@ -64,7 +67,7 @@ class HistoryReceiveDonatePostScreen extends Component {
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
                                 <Text note>{item.province}</Text>
-                                {/* <Text note>{item.data}</Text> */}
+                                <Text note>{item.date}</Text>
                                 {/* <Text note>{item.owner}</Text> */}
                                 {/* <TouchableHighlight
                                     onPress={()=> this.checkForSell(item.key)}
@@ -95,14 +98,16 @@ class HistoryReceiveDonatePostScreen extends Component {
         )
     }
 
-    viewDetail = (name, area, province, description, imageUrl) => {
+    viewDetail = (name, area, province, description, imageUrl, uid, date) => {
         this.props.navigation.navigate('PostDetail',
             {
                 name: name,
                 area: area,
                 province: province,
                 description: description,
-                imageUrl: imageUrl
+                imageUrl: imageUrl,
+                uid: uid,
+                date: date,
             });
     }
 

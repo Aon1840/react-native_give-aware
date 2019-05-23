@@ -19,10 +19,21 @@ class ListSellPostScreen extends Component {
 
     componentDidMount() {
         this.listtenForNewPost(this.taskRef);
+        this.focusListener = this.props.navigation.addListener("didFocus", () => {
+            this.listtenForNewPost(this.taskRef);
+        })
+    }
+
+    componentWillMount(){
+        this.focusListener = this.props.navigation.addListener("didFocus", () => {
+            this.listtenForNewPost(this.taskRef);
+        })
     }
 
     componentWillUnmount(){
-        this.listtenForNewPost(this.taskRef);
+        this.focusListener = this.props.navigation.addListener("didFocus", () => {
+            this.listtenForNewPost(this.taskRef);
+        })
     }
 
     listtenForNewPost(taskRef) {
@@ -39,16 +50,17 @@ class ListSellPostScreen extends Component {
                     imageUrl: child.val().imageUrl,
                     isReceive: child.val().isReceive,
                     uid: child.val().uid,
+                    date: child.val().date,
                 });
-                const available_post = posts.filter(x => x.isReceive === false)
-                this.setState({
-                    data: available_post
-                })
+            })
+            const available_post = posts.filter(x => x.isReceive === false)
+            this.setState({
+                data: available_post
             })
         })
     }
 
-    viewDetail = (name, area, province, description, price, imageUrl) => {
+    viewDetail = (name, area, province, description, price, imageUrl, uid, date) => {
         this.props.navigation.navigate('PostDetail',
             {
                 name: name,
@@ -56,34 +68,36 @@ class ListSellPostScreen extends Component {
                 province: province,
                 description: description,
                 price: price,
-                imageUrl: imageUrl
+                imageUrl: imageUrl,
+                uid: uid,
+                date: date,
             });
     }
 
     checkForSell = (key) => {
-        console.log("------ key: ",key)
+        console.log("------ key: ", key)
         Alert.alert(
             'คุณมั่นใจนะว่าจะซื้อสินค้าชิ้นนี้?',
             'เมื่อกดแล้วสินจะไปอยู่ในประวัติการซื้อสินค้า',
             [
-                {text: 'ตกลง', onPress: () => this.receiveSellPost(key) },
+                { text: 'ตกลง', onPress: () => this.receiveSellPost(key) },
                 {
                     text: 'ยกเลิก',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel'
                 }
             ],
-            {cancelable: false}
+            { cancelable: false }
         )
     }
     receiveSellPost = (key) => {
-        firebase.database().ref('posts/'+key).update({
+        firebase.database().ref('posts/' + key).update({
             receiverID: firebase.auth().currentUser.uid,
             isReceive: true
-        }).then( (data) => {
-            console.log("data when press sell post : ",data)
+        }).then((data) => {
+            console.log("data when press sell post : ", data)
             alert("Succcess!")
-        }).catch( (error) => {
+        }).catch((error) => {
             alert(error.message)
         })
     }
@@ -92,6 +106,7 @@ class ListSellPostScreen extends Component {
     extractKey = ({ name }) => name
 
     renderItem = ({ item }) => {
+        // const owner = firebase.auth().currentUser
         return (
             <TouchableOpacity onPress={() => this.viewDetail(
                 item.name,
@@ -99,7 +114,9 @@ class ListSellPostScreen extends Component {
                 item.province,
                 item.description,
                 item.price,
-                item.imageUrl)} item={item}>
+                item.imageUrl,
+                item.uid,
+                item.date)} item={item}>
                 <Card style={{ height: 150 }}>
                     <CardItem>
                         <Left>
@@ -108,10 +125,10 @@ class ListSellPostScreen extends Component {
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
                                 <Text note>{item.province}</Text>
-                                {/* <Text note>{item.data}</Text> */}
+                                <Text note>{item.date}</Text>
                                 {/* <Text note>{item.owner}</Text> */}
                                 <TouchableHighlight
-                                    onPress={()=> this.checkForSell(item.key)}
+                                    onPress={() => this.checkForSell(item.key)}
                                     style={{
                                         marginTop: 30,
                                         alignSelf: 'flex-end',

@@ -61,6 +61,8 @@ class HomeScreen extends Component {
   }
 
   componentDidMount() {
+    console.log("name: ",firebase.auth().currentUser)
+    console.log("name: ",firebase.auth().currentUser.name)
   }
 
   createPost(){

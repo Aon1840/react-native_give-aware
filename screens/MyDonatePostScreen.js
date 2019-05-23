@@ -36,7 +36,10 @@ class MyDonatePostScreen extends Component {
                     province: child.val().province,
                     description: child.val().description,
                     price: child.val().price,
-                    imageUrl: child.val().imageUrl
+                    imageUrl: child.val().imageUrl,
+                    isReceive: child.val().isReceive,
+                    uid: child.val().uid,
+                    date: child.val().date,
                 });
 
                 this.setState({
@@ -46,7 +49,7 @@ class MyDonatePostScreen extends Component {
         })
     }
 
-    viewDetail = (key, name, area, province, description, imageUrl, uid) => {
+    viewDetail = (key, name, area, province, description, imageUrl, uid, date) => {
         this.props.navigation.navigate('UpdateDonatePost',
             {
                 key: key,
@@ -55,7 +58,8 @@ class MyDonatePostScreen extends Component {
                 province: province,
                 description: description,
                 imageUrl: imageUrl,
-                uid: uid
+                uid: uid,
+                date: date,
             });
     }
 
@@ -111,7 +115,8 @@ class MyDonatePostScreen extends Component {
                 item.province,
                 item.description,
                 item.imageUrl,
-                this.state.uid)} item={item}>
+                this.state.uid,
+                item.date)} item={item}>
                 <Card
                     style={{ height: 150 }}>
                     <CardItem >
@@ -121,28 +126,8 @@ class MyDonatePostScreen extends Component {
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
                                 <Text note>{item.province}</Text>
-                                {/* <Text note>{item.data}</Text> */}
+                                <Text note>{item.date}</Text>
                                 {/* <Text note>{item.owner}</Text> */}
-                                <TouchableHighlight
-                                    style={{
-                                        marginTop: 30,
-                                        alignSelf: 'flex-end',
-                                        backgroundColor: "#F9A622",
-                                        borderRadius: 30,
-                                        width: 100,
-                                        height: 35,
-                                        justifyContent: 'center'
-                                    }}>
-
-                                    <Text style={{
-                                        color: 'white',
-                                        fontWeight: 'bold',
-                                        textAlign: 'center',
-                                        justifyContent: 'center',
-                                    }}>
-                                        ซื้อสินค้า
-                            </Text>
-                                </TouchableHighlight>
                             </Body>
                         </Left>
                     </CardItem>

@@ -3,6 +3,7 @@ import { View, Image, FlatList, TouchableHighlight, StyleSheet } from 'react-nat
 import { Container, Header, Content, Item, Form, Text, Button, Input, Left, Label, Right, Tab, Tabs } from 'native-base';
 import { Constants, ImagePicker, Permissions } from 'expo';
 import uuid from 'uuid';
+import moment from 'moment';
 import * as firebase from 'firebase';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -44,7 +45,7 @@ class CreatePostScreen extends Component {
     }
 
     createSellPost = (name, area, province, description, price, imageUrl, uid) => {
-        console.log("image url from create sell post: ",imageUrl)
+        console.log("image url from create sell post: ", imageUrl)
         if (name && area && province && description && price && imageUrl != "") {
             firebase.database().ref("/posts").push({
                 name,
@@ -54,9 +55,12 @@ class CreatePostScreen extends Component {
                 price,
                 imageUrl,
                 uid,
+                receiverID: "",
+                isReceive: false,
+                date: new Date().toString().substring(0,24),
             }).then((data) => {
                 console.log("------ Create Post Success: ", data);
-                this.props.navigation.navigate('ListPost')
+                this.props.navigation.replace('ListSellPost')
             }).catch((error) => {
                 alert("error: ", error.message);
             });
@@ -66,7 +70,7 @@ class CreatePostScreen extends Component {
     }
 
     createDonatePost = (name, area, province, description, imageUrl, uid) => {
-        if (name && area && province && description && imageUrl != null) {
+        if (name && area && province && description && imageUrl != "") {
             firebase.database().ref("/donateposts").push({
                 name,
                 area,
@@ -74,9 +78,12 @@ class CreatePostScreen extends Component {
                 description,
                 imageUrl,
                 uid,
+                receiverID: "",
+                isReceive: false,
+                date: new Date().toString().substring(0,24),
             }).then((data) => {
                 console.log("------ Create Post Success: ", data);
-                this.props.navigation.navigate('ListPost')
+                this.props.navigation.replace('ListDonatePost')
             }).catch((error) => {
                 alert("error: ", error.message);
             });
@@ -96,141 +103,148 @@ class CreatePostScreen extends Component {
     };
 
 
-
     render() {
         let { key, name, area, province, description, price, imageUrl, uid } = this.state;
         return (
             <Container>
 
-                    <Tabs>
-                        {/* -------------------- Start Create Sell Post -------------------- */}
-                        <Tab heading="โพสต์ขายของ">
-                            <Container style={styles.container}>
-                                <ScrollView>
-                                    <Form>
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>หัวข้อโพสต์</Label>
-                                            <Input
-                                                autoCapitalize="none"
-                                                autoCorrect={false}
-                                                value={this.state.name}
-                                                onChangeText={name => this.setState({ name })} />
-                                        </Item>
+                <Tabs>
+                    {/* -------------------- Start Create Sell Post -------------------- */}
+                    <Tab heading="โพสต์ขายของ">
+                        <Container style={styles.container}>
+                            <ScrollView>
+                                <Form>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>หัวข้อโพสต์</Label>
+                                        <Input
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            value={this.state.name}
+                                            onChangeText={name => this.setState({ name })} />
+                                    </Item>
 
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>บริเวณ</Label>
-                                            <Input
-                                                autoCapitalize="none"
-                                                autoCorrect={false}
-                                                value={this.state.area}
-                                                onChangeText={area => this.setState({ area })} />
-                                        </Item>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>บริเวณ</Label>
+                                        <Input
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            value={this.state.area}
+                                            onChangeText={area => this.setState({ area })} />
+                                    </Item>
 
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>จังหวัด</Label>
-                                            <Input
-                                                autoCapitalize="none"
-                                                autoCorrect={false}
-                                                value={this.state.province}
-                                                onChangeText={province => this.setState({ province })} />
-                                        </Item>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>จังหวัด</Label>
+                                        <Input
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            value={this.state.province}
+                                            onChangeText={province => this.setState({ province })} />
+                                    </Item>
 
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>รายละเอียด</Label>
-                                            <Input
-                                                autoCapitalize="none"
-                                                autoCorrect={true}
-                                                value={this.state.description}
-                                                onChangeText={description => this.setState({ description })}
-                                            />
-                                        </Item>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>รายละเอียด</Label>
+                                        <Input
+                                            autoCapitalize="none"
+                                            autoCorrect={true}
+                                            value={this.state.description}
+                                            onChangeText={description => this.setState({ description })}
+                                        />
+                                    </Item>
 
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>ราคา</Label>
-                                            <Input
-                                                keyboardType="numeric"
-                                                autoCapitalize="none"
-                                                autoCorrect={true}
-                                                value={this.state.price}
-                                                onChangeText={price => this.setState({ price })}
-                                            />
-                                        </Item>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>ราคา</Label>
+                                        <Input
+                                            keyboardType="numeric"
+                                            autoCapitalize="none"
+                                            autoCorrect={true}
+                                            value={this.state.price}
+                                            onChangeText={price => this.setState({ price })}
+                                        />
+                                    </Item>
 
-                                            <View>
-                                                <Image source={require("../images/chooseImage.png")} style={{ marginTop:20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
-                                                <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }} onPress={() => this.pickImage()}>
-                                                    <Text>อัพโหลดรูปภาพ</Text>
-                                                </Button>
-                                                <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.createSellPost(name, area, province, description, price, imageUrl, uid) }}>
-                                                    <Text>สร้างโพสต์</Text>
-                                                </Button>
-                                            </View>
+                                    <View>
+                                        {this.state.imageUrl == "" ?
+                                            <Image source={require("../images/chooseImage.png")} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                                            :
+                                            <Image source={{ uri: imageUrl }} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                                        }
+                                        <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }} onPress={() => this.pickImage()}>
+                                            <Text>อัพโหลดรูปภาพ</Text>
+                                        </Button>
+                                        <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.createSellPost(name, area, province, description, price, imageUrl, uid) }}>
+                                            <Text>สร้างโพสต์</Text>
+                                        </Button>
+                                    </View>
 
-                                    </Form>
-                                </ScrollView>
-                            </Container>
-                        </Tab>
-                        {/* -------------------- End Create Sell Post -------------------- */}
-                        
-                        {/* -------------------- Start Create Donate Post -------------------- */}
-                        <Tab heading="โพสต์บริจาค">
-                            <Container style={styles.container}>
-                                <ScrollView>
-                                    <Form>
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>หัวข้อโพสต์</Label>
-                                            <Input
-                                                autoCapitalize="none"
-                                                autoCorrect={false}
-                                                value={this.state.name}
-                                                onChangeText={name => this.setState({ name })} />
-                                        </Item>
+                                </Form>
+                            </ScrollView>
+                        </Container>
+                    </Tab>
+                    {/* -------------------- End Create Sell Post -------------------- */}
 
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>บริเวณ</Label>
-                                            <Input
-                                                autoCapitalize="none"
-                                                autoCorrect={false}
-                                                value={this.state.area}
-                                                onChangeText={area => this.setState({ area })} />
-                                        </Item>
+                    {/* -------------------- Start Create Donate Post -------------------- */}
+                    <Tab heading="โพสต์บริจาค">
+                        <Container style={styles.container}>
+                            <ScrollView>
+                                <Form>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>หัวข้อโพสต์</Label>
+                                        <Input
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            value={this.state.name}
+                                            onChangeText={name => this.setState({ name })} />
+                                    </Item>
 
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>จังหวัด</Label>
-                                            <Input
-                                                autoCapitalize="none"
-                                                autoCorrect={false}
-                                                value={this.state.province}
-                                                onChangeText={province => this.setState({ province })} />
-                                        </Item>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>บริเวณ</Label>
+                                        <Input
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            value={this.state.area}
+                                            onChangeText={area => this.setState({ area })} />
+                                    </Item>
 
-                                        <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
-                                            <Label>รายละเอียด</Label>
-                                            <Input
-                                                autoCapitalize="none"
-                                                autoCorrect={true}
-                                                value={this.state.description}
-                                                onChangeText={description => this.setState({ description })}
-                                            />
-                                        </Item>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>จังหวัด</Label>
+                                        <Input
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            value={this.state.province}
+                                            onChangeText={province => this.setState({ province })} />
+                                    </Item>
 
-                                            <View>
-                                                <Image source={require("../images/chooseImage.png")} style={{ marginTop:20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
-                                                <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }} onPress={() => this.pickImage()}>
-                                                    <Text>อัพโหลดรูปภาพ</Text>
-                                                </Button>
-                                                <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.createDonatePost(name, area, province, description, imageUrl, uid) }}>
-                                                    <Text>สร้างโพสต์</Text>
-                                                </Button>
-                                            </View>
+                                    <Item floatingLabel style={{ marginLeft: `5%`, marginRight: `5%` }}>
+                                        <Label>รายละเอียด</Label>
+                                        <Input
+                                            autoCapitalize="none"
+                                            autoCorrect={true}
+                                            value={this.state.description}
+                                            onChangeText={description => this.setState({ description })}
+                                        />
+                                    </Item>
+
+                                    <View>
+                                        {this.state.imageUrl == "" ?
+                                            <Image source={require("../images/chooseImage.png")} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                                            :
+                                            <Image source={{ uri: imageUrl }} style={{ marginTop: 20, alignSelf: 'center', justifyContent: "center", height: 250, width: 250 }} />
+                                        }
+                                        <Button full rounded success style={{ marginTop: 20, marginLeft: `5%`, marginRight: `5%` }} onPress={() => this.pickImage()}>
+                                            <Text>อัพโหลดรูปภาพ</Text>
+                                        </Button>
+                                        <Button full rounded style={{ marginTop: 20, marginBottom: 50, marginLeft: `5%`, marginRight: `5%` }} onPress={() => { this.createDonatePost(name, area, province, description, imageUrl, uid) }}>
+                                            <Text>สร้างโพสต์</Text>
+                                        </Button>
+                                    </View>
 
 
-                                    </Form>
-                                </ScrollView>
-                            </Container>
-                        </Tab>
-                        {/* -------------------- Create Donate Post -------------------- */}
-                    </Tabs>
+                                </Form>
+                            </ScrollView>
+                        </Container>
+                    </Tab>
+                    {/* -------------------- Create Donate Post -------------------- */}
+                </Tabs>
             </Container>
 
         );

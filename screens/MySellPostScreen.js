@@ -37,7 +37,9 @@ class MySellPostScreen extends Component {
                     province: child.val().province,
                     description: child.val().description,
                     price: child.val().price,
-                    imageUrl: child.val().imageUrl
+                    imageUrl: child.val().imageUrl,
+                    uid: child.val().uid,
+                    date: child.val().date,
                 });
 
                 this.setState({
@@ -47,7 +49,7 @@ class MySellPostScreen extends Component {
         })
     }
 
-    viewDetail = (key, name, area, province, description, price, imageUrl, uid) => {
+    viewDetail = (key, name, area, province, description, price, imageUrl, uid, date) => {
         this.props.navigation.navigate('UpdateSellPost',
             {
                 key: key,
@@ -57,7 +59,8 @@ class MySellPostScreen extends Component {
                 description: description,
                 price: price,
                 imageUrl: imageUrl,
-                uid: uid
+                uid: uid,
+                date: date
             });
             console.log("key from viewDetail: ",key)
             console.log("imageUrl from viewDetail: ",imageUrl)
@@ -117,7 +120,8 @@ class MySellPostScreen extends Component {
                 item.description,
                 item.price,
                 item.imageUrl,
-                this.state.uid)} item={item}>
+                this.state.uid,
+                item.date)} item={item}>
                 <Card
                     style={{ height: 150 }}>
                     <CardItem >
@@ -127,28 +131,8 @@ class MySellPostScreen extends Component {
                                 <Text>{item.name}</Text>
                                 <Text note>{item.area}</Text>
                                 <Text note>{item.province}</Text>
-                                {/* <Text note>{item.data}</Text> */}
+                                <Text note>{item.date}</Text>
                                 {/* <Text note>{item.owner}</Text> */}
-                                <TouchableHighlight
-                                    style={{
-                                        marginTop: 30,
-                                        alignSelf: 'flex-end',
-                                        backgroundColor: "#F9A622",
-                                        borderRadius: 30,
-                                        width: 100,
-                                        height: 35,
-                                        justifyContent: 'center'
-                                    }}>
-
-                                    <Text style={{
-                                        color: 'white',
-                                        fontWeight: 'bold',
-                                        textAlign: 'center',
-                                        justifyContent: 'center',
-                                    }}>
-                                        ซื้อสินค้า
-                            </Text>
-                                </TouchableHighlight>
                             </Body>
                         </Left>
                     </CardItem>

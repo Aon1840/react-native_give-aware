@@ -15,7 +15,7 @@ class PostDetailScreen extends Component {
     }
 
     render() {
-        let { name, area, province, description, price, imageUrl } = this.props.navigation.state.params;
+        let { name, area, province, description, price, imageUrl, date } = this.props.navigation.state.params;
         return (
             <View>
                 <Image source={{ uri: imageUrl }} style={{alignSelf: 'center', justifyContent: "center", height: 250, width: 250}} />
@@ -24,6 +24,7 @@ class PostDetailScreen extends Component {
                 <Text>{province}</Text>
                 <Text>{description}</Text>
                 <Text>{price}</Text>
+                <Text>{date}</Text>
             </View>
         )
     }
